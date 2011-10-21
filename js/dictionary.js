@@ -10,13 +10,14 @@ if (!window.typeOf) {
     window.typeOf = function(b){var a=typeof b;if(a==="object")if(b){if(b instanceof Array)a="array"}else a="null";return a};
 }
 
-var WSJNG = WSJNG || {};
+var gmap = gmap || {};
+
 
 // an object with some handy extensions
-WSJNG.Dictionary = function() {
+gmap.Dictionary = function() {
 
 };
-WSJNG.Dictionary.prototype = {
+gmap.Dictionary.prototype = {
     get length() {
         var count = 0;
         for (var prop in this) {

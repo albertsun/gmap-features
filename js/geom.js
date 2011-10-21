@@ -20,10 +20,10 @@ if (!window.console) { window.console = { "log": jQuery.noop }; }
 // Set up a Global Namespace
 // ***************************************
 var WSJNG = WSJNG || {};
-WSJNG.geom = WSJNG.geom || {}; // namespace for utility functions that handle geometry
+gmap.geom = gmap.geom || {}; // namespace for utility functions that handle geometry
 
 
-WSJNG.geom.ParseGeoJSONMultiPolygon = function(coordinates) {
+gmap.geom.ParseGeoJSONMultiPolygon = function(coordinates) {
     var i,len1,j,len2,k,len3;
     var multipoly = [],poly,linestring;
     for (i=0,len1=coordinates.length; i<len1; i++) { //loop through polygons
@@ -39,7 +39,7 @@ WSJNG.geom.ParseGeoJSONMultiPolygon = function(coordinates) {
     }
     return multipoly;
 };
-WSJNG.geom.ParseGeoJSONPolygon = function(coordinates) {
+gmap.geom.ParseGeoJSONPolygon = function(coordinates) {
     var j,len2,k,len3;
     var poly=[],linestring;
     for (j=0,len2=coordinates.length; j<len2; j++) { //loop through linestrings

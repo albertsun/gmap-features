@@ -21,6 +21,45 @@ if (!window.console) { window.console = { "log": jQuery.noop }; }
 var WSJNG = WSJNG || {};
 
 
+// Don't want to introduce an underscore dependency just for one function, _.extend
+// https://github.com/documentcloud/underscore/
+var _ = _ || (function() {
+    var _ = {};
+    var slice = Array.prototype.slice,
+    nativeForEach = Array.prototype.forEach;
+
+    // The cornerstone, an `each` implementation, aka `forEach`.
+    // Handles objects with the built-in `forEach`, arrays, and raw objects.
+    // Delegates to **ECMAScript 5**'s native `forEach` if available.
+
+    var each = _.each = _.forEach = function(obj, iterator, context) {
+	if (obj == null) return;
+	if (nativeForEach && obj.forEach === nativeForEach) {
+	    obj.forEach(iterator, context);
+	} else if (obj.length === +obj.length) {
+	    for (var i = 0, l = obj.length; i < l; i++) {
+		if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
+	    }
+	} else {
+	    for (var key in obj) {
+		if (hasOwnProperty.call(obj, key)) {
+		    if (iterator.call(context, obj[key], key, obj) === breaker) return;
+		}
+	    }
+	}
+    };
+    // Extend a given object with all the properties in passed-in object(s).
+    _.extend = function(obj) {
+	each(slice.call(arguments, 1), function(source) {
+	    for (var prop in source) {
+		if (source[prop] !== void 0) obj[prop] = source[prop];
+	    }
+	});
+	return obj;
+    };
+    return _;
+}());
+
 // extend the Google Maps LatLng object for convenience
 google.maps.LatLng.prototype.toGeoJSON = function() { return [this.lng(), this.lat()]; };
 google.maps.MVCArray.prototype.toGeoJSON = function() {
@@ -39,24 +78,24 @@ google.maps.MVCArray.prototype.toGeoJSON = function() {
  * Constructor takes one object params object as an argument.
  * Expects there to be the following fields.
  * @param {Object} params
- * @param {String} params.GEOID10 The unique identifier (GEOID10) of the feature
+ * @param {String} params.id The unique identifier of the feature
  * @param {Array} params.multipolygon A GeoJSON multipolygon like array with LatLng objects. [ [ [ {google.maps.LatLng}, ], ], ]
  * @param {Object} params.fields An object with keys and values of data to store with the feature.
  * @param {google.maps.Map} params.map A google maps object onto which to render the polygons of the feature.
- * @param {WSJNG.DrawingController} params.controller A controller object to control its selected or not state
+ * @param {Object} params.controller A controller object to control its selected or not state
  */
-WSJNG.Feature = function(params) {
+gmap.Feature = function(params) {
     var self = this;
-    this.GEOID10 = params.GEOID10;
+    this.id = params.id;
     this.polygons = [];
     if (params.fields) {
         this.fields = params.fields;
-        this.humanized_fields = {};
-        for (var prop in params.fields) {
-            if (params.fields.hasOwnProperty(prop)) {
-                this.humanized_fields[prop] = WSJNG.util.humanize.addCommas(params.fields[prop]);
-            }
-        }
+        // this.humanized_fields = {};
+        // for (var prop in params.fields) {
+        //     if (params.fields.hasOwnProperty(prop)) {
+        //         this.humanized_fields[prop] = gmap.util.humanize.addCommas(params.fields[prop]);
+        //     }
+        // }
     }
     this.controller = params.controller;
     this._selected = false;
@@ -77,9 +116,9 @@ WSJNG.Feature = function(params) {
     }
 
     // stores which tiles this Feature is on
-    this.tiles = new WSJNG.Dictionary();;
+    this.tiles = new gmap.Dictionary();;
 };
-WSJNG.Feature.prototype = {
+gmap.Feature.prototype = {
     _unselected_poly_options: {
         clickable: true,
         fillOpacity: 0.2,
@@ -89,13 +128,7 @@ WSJNG.Feature.prototype = {
         strokeOpacity: 0.3
     },
     mouseover: function(e) {
-        $("#blockinfo").html(this._infowindow_tmpl($.extend({"GEOID10": this.GEOID10}, this.humanized_fields)));
         this.highlighted = true;
-        if (this.controller.drawmode === true) {
-            this.select();
-        } else if (this.controller.erasemode === true) {
-            this.unselect();
-        }
     },
     select: function() {
         if (this.selected !== true) { this.controller.num_unsaved_changes += 1; }
@@ -133,13 +166,11 @@ WSJNG.Feature.prototype = {
                     fillOpacity: 0.4
                 });
             }
-            this.controller.addToSelection(this);
             this._selected = true;
         } else if (value === false) {
             for (i=0,len=this.polygons.length; i<len; i++) {
                 this.polygons[i].setOptions(this._unselected_poly_options);
             }
-            this.controller.removeFromSelection(this);
             this._selected = false;
         }
     },

@@ -20,7 +20,6 @@
 <script src="js/dictionary.js"></script>
 <script src="js/geom.js"></script>
 <script src="js/feature.js"></script>
-<script src="js/selectioncontroller.js"></script>
 <script src="js/gmap-features.js"></script>
 
 
@@ -36,7 +35,8 @@ function initialize() {
     });
     $.getJSON("data.json", function(data) {
 	features = gmap.load_polygons({
-	    data: data,
+	    map: map,
+	    data: data, //required. all other params are optional.
 	    unselected_opts: {},
 	    highlighted_opts: {},
 	    selected_opts: {},
