@@ -210,4 +210,102 @@ gmap.Feature.prototype = {
             }
         }
     }
+};/* Author: Albert Sun
+   WSJ.com News Graphics
+*/
+
+/*jslint white: false, nomen: false, debug: false, devel: true, onevar: false, plusplus: false, browser: true, bitwise: false, es5: true, maxerr: 200 */
+/*global jQuery: false, $: false, log: false, window: false, WSJNG: false, _: false, google: false, localStorage: false */
+
+// Necessary functions
+if (!window.typeOf) {
+    window.typeOf = function(b){var a=typeof b;if(a==="object")if(b){if(b instanceof Array)a="array"}else a="null";return a};
+}
+
+// ***************************************
+// Just in case there's a console.log hanging around....
+// ***************************************
+if (!window.console) { window.console = { "log": jQuery.noop }; }
+
+
+// ***************************************
+// Set up a Global Namespace
+// ***************************************
+var gmap = gmap || {};
+gmap.geom = gmap.geom || {}; // namespace for utility functions that handle geometry
+
+
+gmap.geom.ParseGeoJSONMultiPolygon = function(coordinates) {
+    var i,len1,j,len2,k,len3;
+    var multipoly = [],poly,linestring;
+    for (i=0,len1=coordinates.length; i<len1; i++) { //loop through polygons
+        poly = [];
+        for (j=0,len2=coordinates[i].length; j<len2; j++) { //loop through linestrings
+            linestring = [];
+            for (k=0,len3=coordinates[i][j].length; k<len3; k++) { //loop through points
+                linestring.push(new google.maps.LatLng(coordinates[i][j][k][1],coordinates[i][j][k][0]));
+            }
+            poly.push(linestring);
+        }
+        multipoly.push(poly);
+    }
+    return multipoly;
+};
+gmap.geom.ParseGeoJSONPolygon = function(coordinates) {
+    var j,len2,k,len3;
+    var poly=[],linestring;
+    for (j=0,len2=coordinates.length; j<len2; j++) { //loop through linestrings
+        linestring = [];
+        for (k=0,len3=coordinates[j].length; k<len3; k++) { //loop through points
+            linestring.push(new google.maps.LatLng(coordinates[j][k][1],coordinates[j][k][0]));
+        }
+        poly.push(linestring);
+    }
+    return poly;
+};
+/*jslint white: false, nomen: false, debug: false, devel: true, onevar: false, plusplus: false, browser: true, bitwise: false, es5: true, maxerr: 200 */
+/*global jQuery: false, $: false, log: false, window: false, WSJNG: false, _: false, google: false, localStorage: false */
+
+var gmap = gmap || {};
+
+gmap.load_polygons = function(params) {
+    var self = {},
+    data = params.data,
+    controller = {"selected": null};
+    
+    
+    if (params.unselected_opts) {
+	_.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
+    }
+    if (params.highlighted_opts) {
+	_.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
+    }
+    if (params.selected_opts) {
+	_.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+    }
+
+    var geom, opts;
+    for (var i=0,len=data.length; i<len; i++) {
+	if (data[i].geom.type == "Polygon") {
+            geom = [gmap.geom.ParseGeoJSONPolygon(data[i].geom.coordinates)];
+        } else {
+            geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geom.coordinates);
+        }
+	opts = {
+	    "id": data[i].id,
+	    "multipolygon": geom,
+	    "fields": data[i].fields,
+	    "controller": controller,
+	    "map": params.map
+	};
+	if (params.highlight_callback) {
+	    opts.highlight_callback = params.highlight_callback;
+	}
+	if (params.select_callback) {
+	    opts.select_callback = params.select_callback;
+	}
+	self[data[i].id] = new gmap.Feature(opts);
+    }
+
+    return self;
 };

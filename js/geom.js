@@ -19,7 +19,7 @@ if (!window.console) { window.console = { "log": jQuery.noop }; }
 // ***************************************
 // Set up a Global Namespace
 // ***************************************
-var WSJNG = WSJNG || {};
+var gmap = gmap || {};
 gmap.geom = gmap.geom || {}; // namespace for utility functions that handle geometry
 
 
