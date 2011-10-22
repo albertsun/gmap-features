@@ -17,9 +17,9 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
-<script src="js/geom.js"></script>
-<script src="js/feature.js"></script>
-<script src="js/gmap-loadpolygons.js"></script>
+<script src="geom.js"></script>
+<script src="feature.js"></script>
+<script src="gmap-loadpolygons.js"></script>
 
 
 <script type="text/javascript">
@@ -32,7 +32,7 @@ function initialize() {
 	mapTypeControl: false,
 	streetViewControl: false
     });
-    $.getJSON("data.json", function(data) {
+    $.getJSON("../sampledata/data.json", function(data) {
 	features = gmap.load_polygons({
 	    map: map,
 	    data: data, //required. all other params are optional.

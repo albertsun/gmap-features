@@ -29,7 +29,7 @@ function initialize() {
 	mapTypeControl: false,
 	streetViewControl: false
     });
-    $.getJSON("data.json", function(data) {
+    $.getJSON("sampledata/data.json", function(data) {
 	features = gmap.load_polygons({
 	    map: map,
 	    data: data, //required. all other params are optional.
