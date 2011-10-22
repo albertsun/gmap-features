@@ -1,0 +1,9 @@
+A library for creating Polygon features on a Google Map.
+
+Supports mouseover and click events and having one selected polygon at a time.
+
+Can provide options to style the polygons in each of the three states, and a callback function to do something upon highlighting or selecting a polygon.
+
+Uses code extracted from http://censusmapmaker.com/ and http://graphicsweb.wsj.com/documents/MTAFARES1108/
+
+MIT License
