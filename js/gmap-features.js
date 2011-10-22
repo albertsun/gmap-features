@@ -6,25 +6,41 @@ var gmap = gmap || {};
 
 gmap.load_polygons = function(params) {
     var self = {},
-    data = params.data;
+    data = params.data,
+    controller = {"selected": null};
+    
     
     if (params.unselected_opts) {
 	_.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
     }
+    if (params.highlighted_opts) {
+	_.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
+    }
+    if (params.selected_opts) {
+	_.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+    }
 
+    var geom, opts;
     for (var i=0,len=data.length; i<len; i++) {
-	var geom;
 	if (data[i].geom.type == "Polygon") {
             geom = [gmap.geom.ParseGeoJSONPolygon(data[i].geom.coordinates)];
         } else {
             geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geom.coordinates);
         }
-	self[data[i].id] = new gmap.Feature({
+	opts = {
 	    "id": data[i].id,
 	    "multipolygon": geom,
 	    "fields": data[i].fields,
+	    "controller": controller,
 	    "map": params.map
-	});
+	};
+	if (params.highlight_callback) {
+	    opts.highlight_callback = params.highlight_callback;
+	}
+	if (params.select_callback) {
+	    opts.select_callback = params.select_callback;
+	}
+	self[data[i].id] = new gmap.Feature(opts);
     }
 
     return self;

@@ -100,11 +100,24 @@ gmap.Feature = function(params) {
     this.controller = params.controller;
     this._selected = false;
     this._highlighted = false;
+    if (params.highlight_callback) {
+	this.highlight_callback = params.highlight_callback;
+    }
+    if (params.select_callback) {
+	this.select_callback = params.select_callback;
+    }
     function mouseoverHandler(e) {
-        self.mouseover(e);
+        self.setHighlighted(true);
     }
     function mouseoutHandler(e) {
-        self.highlighted = false;
+        self.setHighlighted(false);
+    }
+    function clickHandler(e) {
+	if (self.getSelected()) {
+	    self.setSelected(false);
+	} else {
+	    self.setSelected(true);
+	}
     }
     for (var i=0,len=params.multipolygon.length; i<len; i++) {
         this.polygons.push( new google.maps.Polygon(_.extend({}, this._unselected_poly_options, {
@@ -113,6 +126,7 @@ gmap.Feature = function(params) {
         })) );
         google.maps.event.addListener(this.polygons[i], "mousemove", mouseoverHandler);
         google.maps.event.addListener(this.polygons[i], "mouseout", mouseoutHandler);
+        google.maps.event.addListener(this.polygons[i], "click", clickHandler);
     }
 
     // stores which tiles this Feature is on
@@ -121,22 +135,20 @@ gmap.Feature = function(params) {
 gmap.Feature.prototype = {
     _unselected_poly_options: {
         clickable: true,
-        fillOpacity: 0.2,
-        fillColor: "#EDF2FA",
+        fillOpacity: 0.25,
+        fillColor: "#00AE4D",
         strokeColor: "#000000",
-        strokeWeight: 0.5,
-        strokeOpacity: 0.3
+        strokeWeight: 1.0,
+        strokeOpacity: 0.25
     },
-    mouseover: function(e) {
-        this.highlighted = true;
+    _selected_poly_options: {
+        fillColor: "#00AE4D",
+        fillOpacity: 0.5
     },
-    select: function() {
-        if (this.selected !== true) { this.controller.num_unsaved_changes += 1; }
-        this.selected = true;
-    },
-    unselect: function() {
-        if (this.selected !== false) { this.controller.num_unsaved_changes += 1; }
-        this.selected = false;
+    _highlighted_poly_options: {
+        strokeOpacity: 1.0,
+        strokeWeight: 2.0,
+        strokeColor: "#00AE4D"
     },
     remove: function(e) {
         for (var i=0,len=this.polygons.length; i<len; i++) {
@@ -154,19 +166,19 @@ gmap.Feature.prototype = {
         }
         return multipoly;
     },
-    get selected() {
+    getSelected: function() {
         return this._selected;
     },
-    set selected(value) {
+    setSelected: function(value) {
         var i, len;
         if (value === true) {
             for (i=0,len=this.polygons.length; i<len; i++) {
-                this.polygons[i].setOptions({
-                    fillColor: "#00AE4D",
-                    fillOpacity: 0.4
-                });
+                this.polygons[i].setOptions(this._selected_poly_options);
             }
+	    if (this.controller.selected !== null) { this.controller.selected.setSelected(false); }
             this._selected = true;
+	    this.controller.selected = this;
+	    if (this.select_callback) { this.select_callback(); }
         } else if (value === false) {
             for (i=0,len=this.polygons.length; i<len; i++) {
                 this.polygons[i].setOptions(this._unselected_poly_options);
@@ -174,20 +186,17 @@ gmap.Feature.prototype = {
             this._selected = false;
         }
     },
-    get highlighted() {
+    getHighlighted: function() {
         return this._highlighted;
     },
-    set highlighted(value) {
+    setHighlighted: function(value) {
         var i,len;
         if ((value === true) && (this._highlighted === false)) {
             this._highlighted = true;
             for (i=0,len=this.polygons.length; i<len; i++) {
-                this.polygons[i].setOptions({
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2.0,
-                    strokeColor: "#00AE4D"
-                });
+                this.polygons[i].setOptions(this._highlighted_poly_options);
             }
+	    if (this.highlight_callback) { this.highlight_callback(); }
         } else if ((value === false) && (this._highlighted === true)) {
             this._highlighted = false;
             for (i=0,len=this.polygons.length; i<len; i++) {
