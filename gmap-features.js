@@ -172,10 +172,10 @@ gmap.Feature.prototype = {
     setSelected: function(value) {
         var i, len;
         if (value === true) {
+	    if (this.controller.selected !== null) { this.controller.selected.setSelected(false); }
             for (i=0,len=this.polygons.length; i<len; i++) {
                 this.polygons[i].setOptions(this._selected_poly_options);
             }
-	    if (this.controller.selected !== null) { this.controller.selected.setSelected(false); }
             this._selected = true;
 	    this.controller.selected = this;
 	    if (this.select_callback) { this.select_callback(); }
