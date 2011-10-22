@@ -136,19 +136,22 @@ gmap.Feature.prototype = {
     _unselected_poly_options: {
         clickable: true,
         fillOpacity: 0.25,
-        fillColor: "#00AE4D",
+        fillColor: "#AAAAAA",
         strokeColor: "#000000",
         strokeWeight: 1.0,
         strokeOpacity: 0.25
     },
     _selected_poly_options: {
-        fillColor: "#00AE4D",
-        fillOpacity: 0.5
+        fillColor: "#FF0000",
+        fillOpacity: 0.5,
+        strokeOpacity: 1.0,
+	strokeWeight: 2.0,
+        strokeColor: "#FF0000"
     },
     _highlighted_poly_options: {
         strokeOpacity: 1.0,
         strokeWeight: 2.0,
-        strokeColor: "#00AE4D"
+        strokeColor: "#00FF00"
     },
     remove: function(e) {
         for (var i=0,len=this.polygons.length; i<len; i++) {
@@ -199,12 +202,14 @@ gmap.Feature.prototype = {
 	    if (this.highlight_callback) { this.highlight_callback(); }
         } else if ((value === false) && (this._highlighted === true)) {
             this._highlighted = false;
+	    var opts;
+	    if (this.getSelected()) {
+		opts = _.extend({}, this._unselected_poly_options, this._selected_poly_options);
+	    } else {
+		opts = _.extend({}, opts, this._unselected_poly_options);
+	    }
             for (i=0,len=this.polygons.length; i<len; i++) {
-                this.polygons[i].setOptions({
-                    "strokeOpacity": this._unselected_poly_options["strokeOpacity"],
-                    "strokeWeight": this._unselected_poly_options["strokeWeight"],
-                    "strokeColor": this._unselected_poly_options["strokeColor"]
-                });
+                this.polygons[i].setOptions(opts);
             }
         }
     }
