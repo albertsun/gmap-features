@@ -128,9 +128,6 @@ gmap.Feature = function(params) {
         google.maps.event.addListener(this.polygons[i], "mouseout", mouseoutHandler);
         google.maps.event.addListener(this.polygons[i], "click", clickHandler);
     }
-
-    // stores which tiles this Feature is on
-    this.tiles = new gmap.Dictionary();;
 };
 gmap.Feature.prototype = {
     _unselected_poly_options: {
