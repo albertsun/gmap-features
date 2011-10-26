@@ -11,13 +11,13 @@ gmap.load_polygons = function(params) {
     
     
     if (params.unselected_opts) {
-	_.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
+	gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
     }
     if (params.highlighted_opts) {
-	_.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
+	gmap._.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
     }
     if (params.selected_opts) {
-	_.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+	gmap._.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
     }
 
     var geom, opts;
