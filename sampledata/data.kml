@@ -3,51 +3,710 @@
   <Document>
     <name>Marble Hill</name>
     <description>Weird little bit of Manhattan that&#39;s north of the river and really should be considered the Bronx</description>
+    
     <Placemark>
-      <name>Aggregate Values and Area</name>
+      <name>GEOID10: 360050267011000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.900409,40.869118,0 -73.901342,40.869274,0 -73.900606,40.870233,0 -73.899686,40.870041,0 -73.900409,40.869118,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
       <ExtendedData>
         <Data name="aland10">
           <displayName>Land Area (square meters)</displayName>
-          <value>305885</value>
+          <value>9350</value>
         </Data>
         <Data name="totpop">
           <displayName>Total Population</displayName>
-          <value>8463</value>
+          <value>412</value>
         </Data>
         <Data name="totpop_wnh">
           <displayName>White Non-Hispanic Population</displayName>
-          <value>468</value>
+          <value>12</value>
         </Data>
         <Data name="totpop_h">
           <displayName>Hispanic Population</displayName>
-          <value>5905</value>
+          <value>320</value>
         </Data>
         <Data name="totpop_black">
           <displayName>Black Population</displayName>
-          <value>2581</value>
+          <value>66</value>
         </Data>
         <Data name="totpop_na">
           <displayName>Native American Population</displayName>
-          <value>91</value>
+          <value>5</value>
         </Data>
         <Data name="totpop_a">
           <displayName>Asian Population</displayName>
-          <value>108</value>
+          <value>41</value>
         </Data>
         <Data name="totpop_hi">
           <displayName>Hawaiian/Pacific Islander Population</displayName>
-          <value>8</value>
+          <value>0</value>
         </Data>
         <Data name="totpop_other">
           <displayName>Other Racial Group Population Population</displayName>
-          <value>24</value>
+          <value>0</value>
         </Data>
         <Data name="totpop_multiracial">
           <displayName>Multiracial Population</displayName>
-          <value>15</value>
+          <value>0</value>
         </Data>
       </ExtendedData>
-      <Polygon><outerBoundaryIs><LinearRing><coordinates>-73.907245,40.876446,0 -73.907105,40.876277,0 -73.907,40.873455,0 -73.907007,40.873373,0 -73.907104,40.872978,0 -73.907905,40.872678,0 -73.908249,40.872187,0 -73.908605,40.871678,0 -73.908682,40.871758,0 -73.910524,40.874063,0 -73.912851,40.874738,0 -73.915297,40.875493,0 -73.9152,40.875581,0 -73.915168,40.875695,0 -73.915125,40.875845,0 -73.914905,40.876578,0 -73.912205,40.878178,0 -73.911405,40.879278,0 -73.910184,40.879021,0 -73.910044,40.878991,0 -73.909505,40.878878,0 -73.909189,40.878168,0 -73.908682,40.877763,0 -73.908502,40.877691,0 -73.908005,40.877478,0 -73.90782,40.877201,0 -73.907652,40.876934,0 -73.907245,40.876446,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267011001</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.901342,40.869274,0 -73.902127,40.869409,0 -73.901523,40.870393,0 -73.900606,40.870233,0 -73.901342,40.869274,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>8665</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>440</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>15</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>313</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>97</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>3</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>34</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>4</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267012000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.902358,40.868696,0 -73.903668,40.869495,0 -73.903476,40.869843,0 -73.90265,40.870585,0 -73.901523,40.870393,0 -73.902127,40.869409,0 -73.902358,40.868696,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>19921</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>1492</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>45</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>1205</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>288</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>29</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>16</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>13</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267013000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.900188,40.86798,0 -73.901062,40.868283,0 -73.900409,40.869118,0 -73.899686,40.870041,0 -73.898918,40.869658,0 -73.899644,40.868468,0 -73.900188,40.86798,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>18829</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>980</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>57</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>735</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>135</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>4</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>122</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>3</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>6</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267021000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.897797,40.871669,0 -73.899086,40.871969,0 -73.898433,40.873742,0 -73.897797,40.871669,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>11614</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>80</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>10</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>44</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>14</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>10</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>4</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267021001</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.899086,40.871969,0 -73.900039,40.872136,0 -73.899435,40.874157,0 -73.898433,40.873742,0 -73.899086,40.871969,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>19071</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>1080</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>48</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>883</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>234</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>13</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>8</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>5</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>0</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267021002</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.900039,40.872136,0 -73.900954,40.872293,0 -73.900301,40.874475,0 -73.899435,40.874157,0 -73.900039,40.872136,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>18916</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>779</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>46</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>651</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>136</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>15</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>4</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>3</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267022000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.898918,40.869658,0 -73.899686,40.870041,0 -73.899303,40.871244,0 -73.89779,40.870857,0 -73.898918,40.869658,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>15546</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>1037</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>78</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>793</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>160</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>11</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>55</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>5</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267023000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.900954,40.872293,0 -73.902146,40.872502,0 -73.901748,40.873675,0 -73.900927,40.875222,0 -73.90068,40.875677,0 -73.900054,40.876184,0 -73.900301,40.874475,0 -73.900954,40.872293,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>33288</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>1131</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>85</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>801</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>339</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>11</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>18</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>1</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050267026000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.89779,40.870857,0 -73.899303,40.871244,0 -73.899086,40.871969,0 -73.897797,40.871669,0 -73.89779,40.870857,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>10417</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>482</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>17</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>372</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>114</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>6</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>19</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>0</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360050273003001</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.903476,40.869843,0 -73.903648,40.869873,0 -73.903506,40.870695,0 -73.902905,40.871059,0 -73.903172,40.871658,0 -73.902411,40.873573,0 -73.902569,40.874135,0 -73.901748,40.873675,0 -73.902146,40.872502,0 -73.90265,40.870585,0 -73.903476,40.869843,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>24645</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>1514</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>35</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>1147</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>391</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>31</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>39</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>7</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360610307001001</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.916275,40.869583,0 -73.916973,40.870148,0 -73.915746,40.871044,0 -73.915056,40.871603,0 -73.91415,40.87122,0 -73.915106,40.870431,0 -73.91588,40.869847,0 -73.916275,40.869583,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>20905</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>746</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>358</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>292</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>61</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>3</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>23</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>7</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360610307002000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.915056,40.871603,0 -73.915746,40.871044,0 -73.917009,40.871584,0 -73.916278,40.872116,0 -73.915056,40.871603,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>9847</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>320</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>205</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>62</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>40</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>11</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>0</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360610307002001</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.915746,40.871044,0 -73.916973,40.870148,0 -73.917916,40.870923,0 -73.917009,40.871584,0 -73.915746,40.871044,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>14606</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>731</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>471</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>124</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>94</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>1</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>33</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>0</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>1</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+    </Placemark>
+    
+    <Placemark>
+      <name>GEOID10: 360610307003000</name>
+      <MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-73.917009,40.871584,0 -73.917916,40.870923,0 -73.918564,40.871479,0 -73.917176,40.872499,0 -73.916278,40.872116,0 -73.917009,40.871584,0</coordinates></LinearRing></outerBoundaryIs></Polygon></MultiGeometry>
+      <ExtendedData>
+        <Data name="aland10">
+          <displayName>Land Area (square meters)</displayName>
+          <value>14654</value>
+        </Data>
+        <Data name="totpop">
+          <displayName>Total Population</displayName>
+          <value>716</value>
+        </Data>
+        <Data name="totpop_wnh">
+          <displayName>White Non-Hispanic Population</displayName>
+          <value>334</value>
+        </Data>
+        <Data name="totpop_h">
+          <displayName>Hispanic Population</displayName>
+          <value>280</value>
+        </Data>
+        <Data name="totpop_black">
+          <displayName>Black Population</displayName>
+          <value>52</value>
+        </Data>
+        <Data name="totpop_na">
+          <displayName>Native American Population</displayName>
+          <value>9</value>
+        </Data>
+        <Data name="totpop_a">
+          <displayName>Asian Population</displayName>
+          <value>37</value>
+        </Data>
+        <Data name="totpop_hi">
+          <displayName>Hawaiian/Pacific Islander Population</displayName>
+          <value>5</value>
+        </Data>
+        <Data name="totpop_other">
+          <displayName>Other Racial Group Population Population</displayName>
+          <value>5</value>
+        </Data>
+        <Data name="totpop_multiracial">
+          <displayName>Multiracial Population</displayName>
+          <value>4</value>
+        </Data>
+      </ExtendedData>
     </Placemark>
     
     <Placemark>

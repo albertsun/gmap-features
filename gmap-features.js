@@ -6,9 +6,9 @@
 /*global jQuery: false, $: false, log: false, window: false, WSJNG: false, _: false, google: false, localStorage: false */
 
 // Necessary functions
-if (!window.typeOf) {
-    window.typeOf = function(b){var a=typeof b;if(a==="object")if(b){if(b instanceof Array)a="array"}else a="null";return a};
-}
+    if (!window.typeOf) {
+        window.typeOf = function(b){var a=typeof b;if(a==="object")if(b){if(b instanceof Array)a="array"}else a="null";return a};
+    }
 
 // ***************************************
 // Just in case there's a console.log hanging around....
@@ -20,200 +20,203 @@ if (!window.console) { window.console = { "log": function() {} }; }
 // ***************************************
 var gmap = gmap || {};
 
+(function() {
 
-// Don't want to introduce an underscore dependency just for one function, _.extend
-// https://github.com/documentcloud/underscore/
-var _ = _ || (function() {
-    var _ = {};
-    var slice = Array.prototype.slice,
-    nativeForEach = Array.prototype.forEach;
+    // Don't want to introduce an underscore dependency just for one function, _.extend
+    // https://github.com/documentcloud/underscore/
+    gmap._ = window._ || (function() {
+        var _ = {};
+        var slice = Array.prototype.slice,
+        nativeForEach = Array.prototype.forEach;
 
-    // The cornerstone, an `each` implementation, aka `forEach`.
-    // Handles objects with the built-in `forEach`, arrays, and raw objects.
-    // Delegates to **ECMAScript 5**'s native `forEach` if available.
+        // The cornerstone, an `each` implementation, aka `forEach`.
+        // Handles objects with the built-in `forEach`, arrays, and raw objects.
+        // Delegates to **ECMAScript 5**'s native `forEach` if available.
 
-    var each = _.each = _.forEach = function(obj, iterator, context) {
-	if (obj == null) return;
-	if (nativeForEach && obj.forEach === nativeForEach) {
-	    obj.forEach(iterator, context);
-	} else if (obj.length === +obj.length) {
-	    for (var i = 0, l = obj.length; i < l; i++) {
-		if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
-	    }
-	} else {
-	    for (var key in obj) {
-		if (hasOwnProperty.call(obj, key)) {
-		    if (iterator.call(context, obj[key], key, obj) === breaker) return;
-		}
-	    }
-	}
-    };
-    // Extend a given object with all the properties in passed-in object(s).
-    _.extend = function(obj) {
-	each(slice.call(arguments, 1), function(source) {
-	    for (var prop in source) {
-		if (source[prop] !== void 0) obj[prop] = source[prop];
-	    }
-	});
-	return obj;
-    };
-    return _;
-}());
-
-// extend the Google Maps LatLng object for convenience
-google.maps.LatLng.prototype.toGeoJSON = function() { return [this.lng(), this.lat()]; };
-google.maps.MVCArray.prototype.toGeoJSON = function() {
-    var thisarray = this.getArray();
-    var newarray = [];
-    for (var i=0,len=thisarray.length; i<len; i++) {
-        newarray.push(thisarray[i].toGeoJSON());
-    }
-    return newarray;
-};
-
-
-
-/**
- * A geometric feature that goes on the map.
- * Constructor takes one object params object as an argument.
- * Expects there to be the following fields.
- * @param {Object} params
- * @param {String} params.id The unique identifier of the feature
- * @param {Array} params.multipolygon A GeoJSON multipolygon like array with LatLng objects. [ [ [ {google.maps.LatLng}, ], ], ]
- * @param {Object} params.fields An object with keys and values of data to store with the feature.
- * @param {google.maps.Map} params.map A google maps object onto which to render the polygons of the feature.
- * @param {Object} params.controller A controller object to control its selected or not state
- */
-gmap.Feature = function(params) {
-    var self = this;
-    this.id = params.id;
-    this.polygons = [];
-    if (params.fields) {
-        this.fields = params.fields;
-        // this.humanized_fields = {};
-        // for (var prop in params.fields) {
-        //     if (params.fields.hasOwnProperty(prop)) {
-        //         this.humanized_fields[prop] = gmap.util.humanize.addCommas(params.fields[prop]);
-        //     }
-        // }
-    }
-    this.controller = params.controller;
-    this._selected = false;
-    this._highlighted = false;
-    if (params.highlightCallback) {
-	this.highlightCallback = params.highlightCallback;
-    }
-    if (params.selectCallback) {
-	this.selectCallback = params.selectCallback;
-    }
-    if (params.color) {
-        this.unselected_poly_options = _.extend({}, this._unselected_poly_options, {"fillColor": params.color});
-    } else {
-        this.unselected_poly_options = _.extend({}, this._unselected_poly_options);
-    }
-
-    function mouseoverHandler(e) {
-        self.setHighlighted(true);
-    }
-    function mouseoutHandler(e) {
-        self.setHighlighted(false);
-    }
-    function clickHandler(e) {
-	if (self.getSelected()) {
-	    self.setSelected(false);
-	} else {
-	    self.setSelected(true);
-	}
-    }
-    for (var i=0,len=params.multipolygon.length; i<len; i++) {
-        this.polygons.push( new google.maps.Polygon(_.extend({}, this.unselected_poly_options, {
-            paths: params.multipolygon[i],
-            map: params.map
-        } )) );
-        google.maps.event.addListener(this.polygons[i], "mousemove", mouseoverHandler);
-        google.maps.event.addListener(this.polygons[i], "mouseout", mouseoutHandler);
-        google.maps.event.addListener(this.polygons[i], "click", clickHandler);
-    }
-};
-gmap.Feature.prototype = {
-    _unselected_poly_options: {
-        clickable: true,
-        fillColor: "#AAAAAA",
-        strokeColor: "#000000",
-        strokeWeight: 1.0,
-        strokeOpacity: 0.25
-    },
-    _selected_poly_options: {
-        strokeOpacity: 1.0,
-	strokeWeight: 1.0,
-        strokeColor: "#0000FF"
-    },
-    _highlighted_poly_options: {
-        strokeOpacity: 1.0,
-        strokeWeight: 1.0,
-        strokeColor: "#00FF00"
-    },
-    remove: function(e) {
-        for (var i=0,len=this.polygons.length; i<len; i++) {
-            google.maps.event.clearListeners(this.polygons[i], "mousemove");
-            google.maps.event.clearListeners(this.polygons[i], "mouseout");
-            this.polygons[i].setMap(null);
-        }
-        this.controller = null;
-        this.polygons = null;
-    },
-    toGeoJSON: function() {
-        var multipoly = [];
-        for (var i=0,len=this.polygons.length; i<len; i++) {
-            multipoly.push(this.polygons[i].getPaths().toGeoJSON());
-        }
-        return multipoly;
-    },
-    getSelected: function() {
-        return this._selected;
-    },
-    setSelected: function(value) {
-        var i, len;
-        if (value === true) {
-	    if (this.controller.selected !== null) { this.controller.selected.setSelected(false); }
-            for (i=0,len=this.polygons.length; i<len; i++) {
-                this.polygons[i].setOptions(this._selected_poly_options);
-            }
-            this._selected = true;
-	    this.controller.selected = this;
-	    if (this.selectCallback) { this.selectCallback(); }
-        } else if (value === false) {
-            for (i=0,len=this.polygons.length; i<len; i++) {
-                this.polygons[i].setOptions(this._unselected_poly_options);
-            }
-            this._selected = false;
-        }
-    },
-    getHighlighted: function() {
-        return this._highlighted;
-    },
-    setHighlighted: function(value) {
-        var i,len;
-        if ((value === true) && (this._highlighted === false)) {
-            this._highlighted = true;
-            for (i=0,len=this.polygons.length; i<len; i++) {
-                this.polygons[i].setOptions(this._highlighted_poly_options);
-            }
-	    if (this.highlightCallback) { this.highlightCallback(); }
-        } else if ((value === false) && (this._highlighted === true)) {
-            this._highlighted = false;
-	    var opts;
-	    if (this.getSelected()) {
-		opts = _.extend({}, this.unselected_poly_options, this._selected_poly_options);
+        var each = _.each = _.forEach = function(obj, iterator, context) {
+	    if (obj == null) return;
+	    if (nativeForEach && obj.forEach === nativeForEach) {
+	        obj.forEach(iterator, context);
+	    } else if (obj.length === +obj.length) {
+	        for (var i = 0, l = obj.length; i < l; i++) {
+		    if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
+	        }
 	    } else {
-		opts = _.extend({}, opts, this.unselected_poly_options);
+	        for (var key in obj) {
+		    if (hasOwnProperty.call(obj, key)) {
+		        if (iterator.call(context, obj[key], key, obj) === breaker) return;
+		    }
+	        }
 	    }
-            for (i=0,len=this.polygons.length; i<len; i++) {
-                this.polygons[i].setOptions(opts);
+        };
+        // Extend a given object with all the properties in passed-in object(s).
+        _.extend = function(obj) {
+	    each(slice.call(arguments, 1), function(source) {
+	        for (var prop in source) {
+		    if (source[prop] !== void 0) obj[prop] = source[prop];
+	        }
+	    });
+	    return obj;
+        };
+        return _;
+    }());
+
+    // extend the Google Maps LatLng object for convenience
+    google.maps.LatLng.prototype.toGeoJSON = function() { return [this.lng(), this.lat()]; };
+    google.maps.MVCArray.prototype.toGeoJSON = function() {
+        var thisarray = this.getArray();
+        var newarray = [];
+        for (var i=0,len=thisarray.length; i<len; i++) {
+            newarray.push(thisarray[i].toGeoJSON());
+        }
+        return newarray;
+    };
+
+
+
+    /**
+     * A geometric feature that goes on the map.
+     * Constructor takes one object params object as an argument.
+     * Expects there to be the following fields.
+     * @param {Object} params
+     * @param {String} params.id The unique identifier of the feature
+     * @param {Array} params.multipolygon A GeoJSON multipolygon like array with LatLng objects. [ [ [ {google.maps.LatLng}, ], ], ]
+     * @param {Object} params.fields An object with keys and values of data to store with the feature.
+     * @param {google.maps.Map} params.map A google maps object onto which to render the polygons of the feature.
+     * @param {Object} params.controller A controller object to control its selected or not state
+     */
+    gmap.Feature = function(params) {
+        var self = this;
+        this.id = params.id;
+        this.polygons = [];
+        if (params.fields) {
+            this.fields = params.fields;
+            // this.humanized_fields = {};
+            // for (var prop in params.fields) {
+            //     if (params.fields.hasOwnProperty(prop)) {
+            //         this.humanized_fields[prop] = gmap.util.humanize.addCommas(params.fields[prop]);
+            //     }
+            // }
+        }
+        this.controller = params.controller;
+        this._selected = false;
+        this._highlighted = false;
+        if (params.highlightCallback) {
+	    this.highlightCallback = params.highlightCallback;
+        }
+        if (params.selectCallback) {
+	    this.selectCallback = params.selectCallback;
+        }
+        if (params.color) {
+            this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options, {"fillColor": params.color});
+        } else {
+            this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options);
+        }
+
+        function mouseoverHandler(e) {
+            self.setHighlighted(true);
+        }
+        function mouseoutHandler(e) {
+            self.setHighlighted(false);
+        }
+        function clickHandler(e) {
+	    if (self.getSelected()) {
+	        self.setSelected(false);
+	    } else {
+	        self.setSelected(true);
+	    }
+        }
+        for (var i=0,len=params.multipolygon.length; i<len; i++) {
+            this.polygons.push( new google.maps.Polygon(gmap._.extend({}, this.unselected_poly_options, {
+                paths: params.multipolygon[i],
+                map: params.map
+            } )) );
+            google.maps.event.addListener(this.polygons[i], "mousemove", mouseoverHandler);
+            google.maps.event.addListener(this.polygons[i], "mouseout", mouseoutHandler);
+            google.maps.event.addListener(this.polygons[i], "click", clickHandler);
+        }
+    };
+    gmap.Feature.prototype = {
+        _unselected_poly_options: {
+            clickable: true,
+            fillColor: "#AAAAAA",
+            strokeColor: "#000000",
+            strokeWeight: 1.0,
+            strokeOpacity: 0.25
+        },
+        _selected_poly_options: {
+            strokeOpacity: 1.0,
+	    strokeWeight: 1.0,
+            strokeColor: "#0000FF"
+        },
+        _highlighted_poly_options: {
+            strokeOpacity: 1.0,
+            strokeWeight: 1.0,
+            strokeColor: "#00FF00"
+        },
+        remove: function(e) {
+            for (var i=0,len=this.polygons.length; i<len; i++) {
+                google.maps.event.clearListeners(this.polygons[i], "mousemove");
+                google.maps.event.clearListeners(this.polygons[i], "mouseout");
+                this.polygons[i].setMap(null);
+            }
+            this.controller = null;
+            this.polygons = null;
+        },
+        toGeoJSON: function() {
+            var multipoly = [];
+            for (var i=0,len=this.polygons.length; i<len; i++) {
+                multipoly.push(this.polygons[i].getPaths().toGeoJSON());
+            }
+            return multipoly;
+        },
+        getSelected: function() {
+            return this._selected;
+        },
+        setSelected: function(value) {
+            var i, len;
+            if (value === true) {
+	        if (this.controller.selected !== null) { this.controller.selected.setSelected(false); }
+                for (i=0,len=this.polygons.length; i<len; i++) {
+                    this.polygons[i].setOptions(this._selected_poly_options);
+                }
+                this._selected = true;
+	        this.controller.selected = this;
+	        if (this.selectCallback) { this.selectCallback(); }
+            } else if (value === false) {
+                for (i=0,len=this.polygons.length; i<len; i++) {
+                    this.polygons[i].setOptions(this._unselected_poly_options);
+                }
+                this._selected = false;
+            }
+        },
+        getHighlighted: function() {
+            return this._highlighted;
+        },
+        setHighlighted: function(value) {
+            var i,len;
+            if ((value === true) && (this._highlighted === false)) {
+                this._highlighted = true;
+                for (i=0,len=this.polygons.length; i<len; i++) {
+                    this.polygons[i].setOptions(this._highlighted_poly_options);
+                }
+	        if (this.highlightCallback) { this.highlightCallback(); }
+            } else if ((value === false) && (this._highlighted === true)) {
+                this._highlighted = false;
+	        var opts;
+	        if (this.getSelected()) {
+		    opts = gmap._.extend({}, this.unselected_poly_options, this._selected_poly_options);
+	        } else {
+		    opts = gmap._.extend({}, opts, this.unselected_poly_options);
+	        }
+                for (i=0,len=this.polygons.length; i<len; i++) {
+                    this.polygons[i].setOptions(opts);
+                }
             }
         }
-    }
-};/* Author: Albert Sun
+    };
+
+}());/* Author: Albert Sun
    WSJ.com News Graphics
 */
 
@@ -266,52 +269,106 @@ gmap.geom.ParseGeoJSONPolygon = function(coordinates) {
     }
     return poly;
 };
+
+gmap.geom.ParseKMLMultiPolygon = function(data) {
+    var polys = $.map($(data).find('Polygon'), function(poly, j) {
+        var linearrings = $.map($(poly).find("coordinates"), function(line, i) {
+            var $line = $(line);
+            var arr = $line.text().split(/\s+/);
+            var path = $.map(arr, function(el, i) {
+	        if (el !== "") {
+		    var latlng = new google.maps.LatLng(parseFloat($.trim(el).split(',')[1]), parseFloat($.trim(el).split(',')[0]));
+                    //bounds.extend(latlng);
+                    return latlng;
+	        }
+            });
+            return [path];
+        });
+        //console.log(lines.length);
+        return [linearrings];
+    });
+    return polys;
+};
 /*jslint white: false, nomen: false, debug: false, devel: true, onevar: false, plusplus: false, browser: true, bitwise: false, es5: true, maxerr: 200 */
 /*global jQuery: false, $: false, log: false, window: false, WSJNG: false, _: false, google: false, localStorage: false */
 
 var gmap = gmap || {};
 
-gmap.load_polygons = function(params) {
-    var self = {},
-    data = params.data,
-    controller = {"selected": null};
-    
-    
-    if (params.unselected_opts) {
-	_.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
-    }
-    if (params.highlighted_opts) {
-	_.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
-    }
-    if (params.selected_opts) {
-	_.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+(function() {
+
+    function parseKML(kmlstring) {
+        var doc = $(kmlstring),
+        features = $.map(doc.find("Placemark"), function(placemark, i) {
+            var obj = {};
+            $placemark = $(placemark);
+            obj.geom = $placemark.find("MultiGeometry")[0];
+            obj.id = $placemark.find("name").text();
+            obj.fields = {};
+            var datapoints = $placemark.find("ExtendedData Data"), $datapoint, val;
+            for (var j=0,len=datapoints.length; j<len; j++) {
+                $datapoint = $(datapoints[j]),
+                val = $datapoint.find("value").text();
+                if (!isNaN(parseFloat(val))) { val = Number(val); }
+                obj.fields[$datapoint.attr("name")] = val;
+            }
+            return obj;
+        });
+        return features;
     }
 
-    var geom, opts;
-    for (var i=0,len=data.length; i<len; i++) {
-	if (data[i].geom.type == "Polygon") {
-            geom = [gmap.geom.ParseGeoJSONPolygon(data[i].geom.coordinates)];
-        } else {
-            geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geom.coordinates);
+    gmap.load_polygons = function(params) {
+        var self = {},
+        data = params.data,
+        controller = {"selected": null};
+        
+        if (params.data_type === "kml") {
+            data = parseKML(data);
+            //console.log(data);
         }
-	opts = {
-	    "id": data[i].id,
-	    "multipolygon": geom,
-	    "fields": data[i].fields,
-	    "controller": controller,
-	    "map": params.map
-	};
-        if (params.getColor) {
-            opts.color = params.getColor(data[i].fields);
+        
+        if (params.unselected_opts) {
+	    gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
         }
-	if (params.highlightCallback) {
-	    opts.highlightCallback = params.highlightCallback;
-	}
-	if (params.selectCallback) {
-	    opts.selectCallback = params.selectCallback;
-	}
-	self[data[i].id] = new gmap.Feature(opts);
-    }
+        if (params.highlighted_opts) {
+	    gmap._.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
+        }
+        if (params.selected_opts) {
+	    gmap._.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+        }
 
-    return self;
-};
+        var geom, opts;
+        for (var i=0,len=data.length; i<len; i++) {
+            if (data[i].geom.tagName == "MultiGeometry") {
+                // data is a KML node
+                geom = gmap.geom.ParseKMLMultiPolygon(data[i].geom);
+            } else {
+                // data is a geom object
+	        if (data[i].geom.type == "Polygon") {
+                    geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geom.coordinates) ];
+                } else {
+                    geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geom.coordinates);
+                }
+            }
+
+	    opts = {
+	        "id": data[i].id,
+	        "multipolygon": geom,
+	        "fields": data[i].fields,
+	        "controller": controller,
+	        "map": params.map
+	    };
+            if (params.getColor) {
+                opts.color = params.getColor(data[i].fields);
+            }
+	    if (params.highlightCallback) {
+	        opts.highlightCallback = params.highlightCallback;
+	    }
+	    if (params.selectCallback) {
+	        opts.selectCallback = params.selectCallback;
+	    }
+	    self[data[i].id] = new gmap.Feature(opts);
+        }
+
+        return self;
+    };
+}());

@@ -51,3 +51,23 @@ gmap.geom.ParseGeoJSONPolygon = function(coordinates) {
     }
     return poly;
 };
+
+gmap.geom.ParseKMLMultiPolygon = function(data) {
+    var polys = $.map($(data).find('Polygon'), function(poly, j) {
+        var linearrings = $.map($(poly).find("coordinates"), function(line, i) {
+            var $line = $(line);
+            var arr = $line.text().split(/\s+/);
+            var path = $.map(arr, function(el, i) {
+	        if (el !== "") {
+		    var latlng = new google.maps.LatLng(parseFloat($.trim(el).split(',')[1]), parseFloat($.trim(el).split(',')[0]));
+                    //bounds.extend(latlng);
+                    return latlng;
+	        }
+            });
+            return [path];
+        });
+        //console.log(lines.length);
+        return [linearrings];
+    });
+    return polys;
+};

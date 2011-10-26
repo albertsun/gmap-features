@@ -24,6 +24,7 @@ var map, features;
 function initialize() {
     map = new google.maps.Map(document.getElementById("map_canvas"), {
 	center: new google.maps.LatLng(40.731368,-73.975071),
+        //center: new google.maps.LatLng(40.8765,-73.9095),
 	zoom: 15,
 	mapTypeId: google.maps.MapTypeId.ROADMAP,
 	mapTypeControl: false,
@@ -32,7 +33,8 @@ function initialize() {
     $.getJSON("sampledata/data.json", function(data) {
 	features = gmap.load_polygons({
 	    map: map,
-	    data: data, //required. all other params are optional.
+	    data: data, //required. all other params are optional
+            data_type: "json", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
             getColor: function(data) {
                 // runs in the scope of each feature. returns the color to set it to
                 // has access to the data in this.fields

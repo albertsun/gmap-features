@@ -26,13 +26,14 @@
 var map, features;
 function initialize() {
     map = new google.maps.Map(document.getElementById("map_canvas"), {
-	center: new google.maps.LatLng(40.731368,-73.975071),
+        //center: new google.maps.LatLng(40.731368,-73.975071),
+        center: new google.maps.LatLng(40.8765,-73.9095),
 	zoom: 15,
 	mapTypeId: google.maps.MapTypeId.ROADMAP,
 	mapTypeControl: false,
 	streetViewControl: false
     });
-    $.getJSON("../sampledata/data.json", function(data) {
+    $.get("../sampledata/data.kml", function(data) {
 
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
 
@@ -42,6 +43,7 @@ function initialize() {
 	features = gmap.load_polygons({
 	    map: map,
 	    data: data, //required. all other params are optional
+            data_type: "kml", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
             getColor: function(data) {
                 // runs in the scope of each feature. returns the color to set it to
                 // has access to the data in this.fields
