@@ -34,11 +34,14 @@ gmap.load_polygons = function(params) {
 	    "controller": controller,
 	    "map": params.map
 	};
-	if (params.highlight_callback) {
-	    opts.highlight_callback = params.highlight_callback;
+        if (params.getColor) {
+            opts.color = params.getColor(data[i].fields);
+        }
+	if (params.highlightCallback) {
+	    opts.highlightCallback = params.highlightCallback;
 	}
-	if (params.select_callback) {
-	    opts.select_callback = params.select_callback;
+	if (params.selectCallback) {
+	    opts.selectCallback = params.selectCallback;
 	}
 	self[data[i].id] = new gmap.Feature(opts);
     }

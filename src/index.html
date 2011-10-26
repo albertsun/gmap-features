@@ -33,19 +33,39 @@ function initialize() {
 	streetViewControl: false
     });
     $.getJSON("../sampledata/data.json", function(data) {
+
+        var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
+
+        /*
+         * invoke load_polygons
+         */
 	features = gmap.load_polygons({
 	    map: map,
-	    data: data, //required. all other params are optional.
-	    unselected_opts: {},
+	    data: data, //required. all other params are optional
+            getColor: function(data) {
+                // runs in the scope of each feature. returns the color to set it to
+                // has access to the data in this.fields
+                var perc;
+                if (data.totpop != 0) {
+                    perc = Number(data.totpop_wnh)/Number(data.totpop);
+                } else { perc = 0; }
+                return BLUES[(Math.floor(perc * 5)) % 5]; /* maps [0,1) into 0 to 4. buckets of .2 */
+            },
+	    unselected_opts: {
+                "fillOpacity": .75
+            },
 	    highlighted_opts: {},
 	    selected_opts: {},
-	    highlight_callback: function(e) {
-		console.log("highlighted "+this);
+	    highlightCallback: function(e) {
+		console.log("highlighted "+this.id);
 	    },
-	    select_callback: function(e) {
-		console.log("selected "+this);
+	    selectCallback: function(e) {
+		console.log(this.fields);
 	    }
 	});
+
+
+
     });
 }
 
