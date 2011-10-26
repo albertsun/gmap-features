@@ -13,7 +13,7 @@ if (!window.typeOf) {
 // ***************************************
 // Just in case there's a console.log hanging around....
 // ***************************************
-if (!window.console) { window.console = { "log": jQuery.noop }; }
+if (!window.console) { window.console = { "log": function() {} }; }
 
 // ***************************************
 // Set up a Global Namespace
@@ -100,12 +100,18 @@ gmap.Feature = function(params) {
     this.controller = params.controller;
     this._selected = false;
     this._highlighted = false;
-    if (params.highlight_callback) {
-	this.highlight_callback = params.highlight_callback;
+    if (params.highlightCallback) {
+	this.highlightCallback = params.highlightCallback;
     }
-    if (params.select_callback) {
-	this.select_callback = params.select_callback;
+    if (params.selectCallback) {
+	this.selectCallback = params.selectCallback;
     }
+    if (params.color) {
+        this.unselected_poly_options = _.extend({}, this._unselected_poly_options, {"fillColor": params.color});
+    } else {
+        this.unselected_poly_options = _.extend({}, this._unselected_poly_options);
+    }
+
     function mouseoverHandler(e) {
         self.setHighlighted(true);
     }
@@ -120,10 +126,10 @@ gmap.Feature = function(params) {
 	}
     }
     for (var i=0,len=params.multipolygon.length; i<len; i++) {
-        this.polygons.push( new google.maps.Polygon(_.extend({}, this._unselected_poly_options, {
+        this.polygons.push( new google.maps.Polygon(_.extend({}, this.unselected_poly_options, {
             paths: params.multipolygon[i],
             map: params.map
-        })) );
+        } )) );
         google.maps.event.addListener(this.polygons[i], "mousemove", mouseoverHandler);
         google.maps.event.addListener(this.polygons[i], "mouseout", mouseoutHandler);
         google.maps.event.addListener(this.polygons[i], "click", clickHandler);
@@ -132,22 +138,19 @@ gmap.Feature = function(params) {
 gmap.Feature.prototype = {
     _unselected_poly_options: {
         clickable: true,
-        fillOpacity: 0.25,
         fillColor: "#AAAAAA",
         strokeColor: "#000000",
         strokeWeight: 1.0,
         strokeOpacity: 0.25
     },
     _selected_poly_options: {
-        fillColor: "#FF0000",
-        fillOpacity: 0.5,
         strokeOpacity: 1.0,
-	strokeWeight: 2.0,
-        strokeColor: "#FF0000"
+	strokeWeight: 1.0,
+        strokeColor: "#0000FF"
     },
     _highlighted_poly_options: {
         strokeOpacity: 1.0,
-        strokeWeight: 2.0,
+        strokeWeight: 1.0,
         strokeColor: "#00FF00"
     },
     remove: function(e) {
@@ -178,7 +181,7 @@ gmap.Feature.prototype = {
             }
             this._selected = true;
 	    this.controller.selected = this;
-	    if (this.select_callback) { this.select_callback(); }
+	    if (this.selectCallback) { this.selectCallback(); }
         } else if (value === false) {
             for (i=0,len=this.polygons.length; i<len; i++) {
                 this.polygons[i].setOptions(this._unselected_poly_options);
@@ -196,14 +199,14 @@ gmap.Feature.prototype = {
             for (i=0,len=this.polygons.length; i<len; i++) {
                 this.polygons[i].setOptions(this._highlighted_poly_options);
             }
-	    if (this.highlight_callback) { this.highlight_callback(); }
+	    if (this.highlightCallback) { this.highlightCallback(); }
         } else if ((value === false) && (this._highlighted === true)) {
             this._highlighted = false;
 	    var opts;
 	    if (this.getSelected()) {
-		opts = _.extend({}, this._unselected_poly_options, this._selected_poly_options);
+		opts = _.extend({}, this.unselected_poly_options, this._selected_poly_options);
 	    } else {
-		opts = _.extend({}, opts, this._unselected_poly_options);
+		opts = _.extend({}, opts, this.unselected_poly_options);
 	    }
             for (i=0,len=this.polygons.length; i<len; i++) {
                 this.polygons[i].setOptions(opts);
@@ -225,7 +228,7 @@ if (!window.typeOf) {
 // ***************************************
 // Just in case there's a console.log hanging around....
 // ***************************************
-if (!window.console) { window.console = { "log": jQuery.noop }; }
+if (!window.console) { window.console = { "log": function() {} }; }
 
 
 // ***************************************
@@ -298,11 +301,14 @@ gmap.load_polygons = function(params) {
 	    "controller": controller,
 	    "map": params.map
 	};
-	if (params.highlight_callback) {
-	    opts.highlight_callback = params.highlight_callback;
+        if (params.getColor) {
+            opts.color = params.getColor(data[i].fields);
+        }
+	if (params.highlightCallback) {
+	    opts.highlightCallback = params.highlightCallback;
 	}
-	if (params.select_callback) {
-	    opts.select_callback = params.select_callback;
+	if (params.selectCallback) {
+	    opts.selectCallback = params.selectCallback;
 	}
 	self[data[i].id] = new gmap.Feature(opts);
     }

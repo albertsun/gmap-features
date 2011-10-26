@@ -13,7 +13,7 @@ if (!window.typeOf) {
 // ***************************************
 // Just in case there's a console.log hanging around....
 // ***************************************
-if (!window.console) { window.console = { "log": jQuery.noop }; }
+if (!window.console) { window.console = { "log": function() {} }; }
 
 // ***************************************
 // Set up a Global Namespace
@@ -145,12 +145,12 @@ gmap.Feature.prototype = {
     },
     _selected_poly_options: {
         strokeOpacity: 1.0,
-	strokeWeight: 2.0,
+	strokeWeight: 1.0,
         strokeColor: "#0000FF"
     },
     _highlighted_poly_options: {
         strokeOpacity: 1.0,
-        strokeWeight: 2.0,
+        strokeWeight: 1.0,
         strokeColor: "#00FF00"
     },
     remove: function(e) {

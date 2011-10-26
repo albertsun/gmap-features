@@ -54,8 +54,14 @@ function initialize() {
 	    unselected_opts: {
                 "fillOpacity": .75
             },
-	    highlighted_opts: {},
-	    selected_opts: {},
+	    highlighted_opts: {
+                strokeWeight: 3.0,
+                strokeColor: "#FF0000"
+            },
+	    selected_opts: {
+                strokeWeight: 2.0,
+                strokeColor: "#0000FF"
+            },
 	    highlightCallback: function(e) {
 		console.log("highlighted "+this.id);
 	    },

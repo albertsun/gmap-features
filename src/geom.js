@@ -13,7 +13,7 @@ if (!window.typeOf) {
 // ***************************************
 // Just in case there's a console.log hanging around....
 // ***************************************
-if (!window.console) { window.console = { "log": jQuery.noop }; }
+if (!window.console) { window.console = { "log": function() {} }; }
 
 
 // ***************************************
