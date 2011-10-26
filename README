@@ -7,3 +7,9 @@ Can provide options to style the polygons in each of the three states, and a cal
 Uses code extracted from http://censusmapmaker.com/ and http://graphicsweb.wsj.com/documents/MTAFARES1108/
 
 MIT License
+
+
+
+If you want to tinker with the code, the file in src/ includes each js file separately. To build them into the final gmap-features.min.js file run ./build.sh
+That'll need a the $CLOSURE_PATH for Google's Closure Compiler set. Put something like the below in your .bash_profile
+export CLOSURE_PATH='/Users/suna/stuff/closure-compiler/compiler.jar'
