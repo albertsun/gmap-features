@@ -3,15 +3,19 @@
 <head>
   <title>Sample gmap-features code</title>
   <style type="text/css">
-    html, body, #map_canvas {
+    html, body, #map1, #map2 {
     margin: 0;
     padding: 0;
     height: 100%;
     }
+    #map1, #map2 {
+    float: left;
+    }
 </style>
 </head>
 <body>
-<div id="map_canvas" style="width:100%;height:100%;"></div>
+<div id="map1" style="width:50%;height:100%;"></div>
+<div id="map2" style="width:50%;height:100%;"></div>
 
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
@@ -20,9 +24,11 @@
 <script src="gmap-features.min.js"></script>
 
 <script type="text/javascript">
-var map, features;
-function initialize() {
-    map = new google.maps.Map(document.getElementById("map_canvas"), {
+// example using json data
+function map1() {
+    var map, features;
+
+    map = new google.maps.Map(document.getElementById("map1"), {
 	center: new google.maps.LatLng(40.731368,-73.975071),
 	zoom: 15,
 	mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -30,7 +36,7 @@ function initialize() {
 	streetViewControl: false
     });
 
-    // example using json data
+
     $.getJSON("sampledata/data.json", function(data) {
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
         /*
@@ -68,9 +74,13 @@ function initialize() {
 	    }
 	});
     });
+}
 
-    /* // example using KML data
-    map = new google.maps.Map(document.getElementById("map_canvas"), {
+// example using KML data
+function map2() {
+    var map, features;
+
+    map = new google.maps.Map(document.getElementById("map2"), {
         center: new google.maps.LatLng(40.8765,-73.9095),
 	zoom: 15,
 	mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -114,7 +124,11 @@ function initialize() {
 	});
 
     });
-    */
+}
+
+function initialize() {
+    map1();
+    map2();
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
