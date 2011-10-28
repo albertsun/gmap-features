@@ -338,7 +338,7 @@ var gmap = gmap || {};
 
         var geom, opts;
         for (var i=0,len=data.length; i<len; i++) {
-            if (data[i].geom.tagName == "MultiGeometry") {
+            if (!data[i].geom.coordinates) {
                 // data is a KML node
                 geom = gmap.geom.ParseKMLMultiPolygon(data[i].geom);
             } else {
