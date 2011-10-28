@@ -301,15 +301,15 @@ var gmap = gmap || {};
         features = $.map(doc.find("Placemark"), function(placemark, i) {
             var obj = {};
             $placemark = $(placemark);
-            obj.geom = $placemark.find("MultiGeometry")[0];
+            obj.geometry = $placemark.find("MultiGeometry")[0];
             obj.id = $placemark.find("name").text();
-            obj.fields = {};
+            obj.properties = {};
             var datapoints = $placemark.find("ExtendedData Data"), $datapoint, val;
             for (var j=0,len=datapoints.length; j<len; j++) {
                 $datapoint = $(datapoints[j]),
                 val = $datapoint.find("value").text();
                 if (!isNaN(parseFloat(val))) { val = Number(val); }
-                obj.fields[$datapoint.attr("name")] = val;
+                obj.properties[$datapoint.attr("name")] = val;
             }
             return obj;
         });
@@ -320,11 +320,14 @@ var gmap = gmap || {};
         var self = {},
         data = params.data,
         controller = {"selected": null};
-        
-        if (params.data_type === "kml") {
+
+        if (params.data_type == "kml") {
             data = parseKML(data);
             //console.log(data);
+        } else {
+            data = data.features;
         }
+
         
         if (params.unselected_opts) {
 	    gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
@@ -338,27 +341,27 @@ var gmap = gmap || {};
 
         var geom, opts;
         for (var i=0,len=data.length; i<len; i++) {
-            if (!data[i].geom.coordinates) {
+            if (!data[i].geometry.coordinates) {
                 // data is a KML node
-                geom = gmap.geom.ParseKMLMultiPolygon(data[i].geom);
+                geom = gmap.geom.ParseKMLMultiPolygon(data[i].geometry);
             } else {
                 // data is a geom object
-	        if (data[i].geom.type == "Polygon") {
-                    geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geom.coordinates) ];
+	        if (data[i].geometry.type == "Polygon") {
+                    geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geometry.coordinates) ];
                 } else {
-                    geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geom.coordinates);
+                    geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geometry.coordinates);
                 }
             }
 
 	    opts = {
 	        "id": data[i].id,
 	        "multipolygon": geom,
-	        "fields": data[i].fields,
+	        "fields": data[i].properties,
 	        "controller": controller,
 	        "map": params.map
 	    };
             if (params.getColor) {
-                opts.color = params.getColor(data[i].fields);
+                opts.color = params.getColor(data[i].properties);
             }
 	    if (params.highlightCallback) {
 	        opts.highlightCallback = params.highlightCallback;
