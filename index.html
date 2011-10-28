@@ -9,16 +9,26 @@
     height: 100%;
     }
     #map1, #map2 {
-    float: left;
+
     }
 </style>
 </head>
 <body>
 <h1>Demo of gmap-features</h1>
-<p>Parsing JSON data file</p>
-<div id="map1" style="width:500px;height:300px;"></div>
-<p>Parsing KML data file</p>
-<div id="map2" style="width:500px;height:300px;"></div>
+<ul>
+  <li>
+    <p>Parsing JSON data file</p>
+    <div id="map1" style="width:500px;height:300px;"></div>
+  </li>
+  <li>
+    <p>Parsing KML data file</p>
+    <div id="map2" style="width:500px;height:300px;"></div>
+  </li>
+  <li>
+    <p>Supports features with holes and multiple parts</p>
+    <div id="map3" style="width:500px;height:300px;"></div>
+  </li>
+</ul>
 
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
@@ -90,7 +100,57 @@ function map2() {
 	mapTypeControl: false,
 	streetViewControl: false
     });
-    $.get("../sampledata/data.kml", function(data) {
+    $.get("sampledata/data.kml", function(data) {
+
+        var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
+
+	features = gmap.load_polygons({
+	    map: map,
+	    data: data, //required. all other params are optional
+            data_type: "kml", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
+            getColor: function(data) {
+                // runs in the scope of each feature. returns the color to set it to
+                // has access to the data in this.fields
+                var perc;
+                if (data.totpop != 0) {
+                    perc = Number(data.totpop_wnh)/Number(data.totpop);
+                } else { perc = 0; }
+                return BLUES[(Math.floor(perc * 5)) % 5]; // maps [0,1) into 0 to 4. buckets of .2
+            },
+	    unselected_opts: {
+                "fillOpacity": .75
+            },
+	    highlighted_opts: {
+                strokeWeight: 3.0,
+                strokeColor: "#FF0000"
+            },
+	    selected_opts: {
+                strokeWeight: 2.0,
+                strokeColor: "#0000FF"
+            },
+	    highlightCallback: function(e) {
+		console.log("highlighted "+this.id);
+	    },
+	    selectCallback: function(e) {
+		console.log(this.fields);
+	    }
+	});
+
+    });
+}
+
+// example using KML data
+function map3() {
+    var map, features;
+
+    map = new google.maps.Map(document.getElementById("map3"), {
+        center: new google.maps.LatLng(40.8765,-73.9095),
+	zoom: 15,
+	mapTypeId: google.maps.MapTypeId.ROADMAP,
+	mapTypeControl: false,
+	streetViewControl: false
+    });
+    $.get("sampledata/data2.kml", function(data) {
 
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
 
@@ -132,6 +192,7 @@ function map2() {
 function initialize() {
     map1();
     map2();
+    map3();
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
