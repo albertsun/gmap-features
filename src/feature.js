@@ -185,7 +185,7 @@ var gmap = gmap || {};
 	        if (this.selectCallback) { this.selectCallback(); }
             } else if (value === false) {
                 for (i=0,len=this.polygons.length; i<len; i++) {
-                    this.polygons[i].setOptions(this._unselected_poly_options);
+                    this.polygons[i].setOptions(this.unselected_poly_options);
                 }
                 this._selected = false;
             }
