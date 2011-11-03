@@ -26,6 +26,7 @@ var gmap = gmap || {};
     // https://github.com/documentcloud/underscore/
     gmap._ = window._ || (function() {
         var _ = {};
+        var breaker = {};
         var slice = Array.prototype.slice,
         nativeForEach = Array.prototype.forEach;
 
