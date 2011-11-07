@@ -298,8 +298,8 @@ var gmap = gmap || {};
 (function() {
 
     function parseKML(kmlstring) {
-        var doc = $(kmlstring),
-        features = $.map(doc.find("Placemark"), function(placemark, i) {
+        var doc = $(kmlstring);
+        var features = $.map(doc.find("Placemark"), function(placemark, i) {
             var obj = {};
             $placemark = $(placemark);
             obj.geometry = $placemark.find("MultiGeometry")[0];
@@ -342,7 +342,7 @@ var gmap = gmap || {};
 
         var geom, opts;
         for (var i=0,len=data.length; i<len; i++) {
-            if (!data[i].geometry.coordinates) {
+            if (typeOf(data[i].geometry.coordinates) !== "array") {
                 // data is a KML node
                 geom = gmap.geom.ParseKMLMultiPolygon(data[i].geometry);
             } else {
