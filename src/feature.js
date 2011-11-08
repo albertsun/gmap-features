@@ -171,24 +171,38 @@ var gmap = gmap || {};
             }
             return multipoly;
         },
+		// Redraw the polygons associated with the feature
+		redraw: function() {
+			var opts = gmap._.extend({}, this.unselected_poly_options);
+
+			if(this._highlighted) {
+				opts = gmap._.extend(opts, this._highlighted_poly_options);
+			} else if(this._selected) {
+				opts = gmap._.extend(opts, this._selected_poly_options);
+			}
+
+            for (i=0,len=this.polygons.length; i<len; i++) {
+                this.polygons[i].setOptions(opts);
+            }
+		},
         getSelected: function() {
             return this._selected;
         },
         setSelected: function(value) {
             var i, len;
             if (value === true) {
-	        if (this.controller.selected !== null) { this.controller.selected.setSelected(false); }
-                for (i=0,len=this.polygons.length; i<len; i++) {
-                    this.polygons[i].setOptions(this._selected_poly_options);
-                }
+	        	if (this.controller.selected !== null) { 
+					this.controller.selected.setSelected(false); 
+				}
                 this._selected = true;
-	        this.controller.selected = this;
-	        if (this.selectCallback) { this.selectCallback(); }
+				this.redraw();
+		        this.controller.selected = this;
+		        if (this.selectCallback) { 
+					this.selectCallback(); 
+				}
             } else if (value === false) {
-                for (i=0,len=this.polygons.length; i<len; i++) {
-                    this.polygons[i].setOptions(this.unselected_poly_options);
-                }
                 this._selected = false;
+				this.redraw();
             }
         },
         getHighlighted: function() {
@@ -198,21 +212,13 @@ var gmap = gmap || {};
             var i,len;
             if ((value === true) && (this._highlighted === false)) {
                 this._highlighted = true;
-                for (i=0,len=this.polygons.length; i<len; i++) {
-                    this.polygons[i].setOptions(this._highlighted_poly_options);
-                }
-	        if (this.highlightCallback) { this.highlightCallback(); }
+                this.redraw();
+	        	if (this.highlightCallback) { 
+					this.highlightCallback(); 
+				}
             } else if ((value === false) && (this._highlighted === true)) {
                 this._highlighted = false;
-	        var opts;
-	        if (this.getSelected()) {
-		    opts = gmap._.extend({}, this.unselected_poly_options, this._selected_poly_options);
-	        } else {
-		    opts = gmap._.extend({}, opts, this.unselected_poly_options);
-	        }
-                for (i=0,len=this.polygons.length; i<len; i++) {
-                    this.polygons[i].setOptions(opts);
-                }
+				this.redraw();
             }
         }
     };
