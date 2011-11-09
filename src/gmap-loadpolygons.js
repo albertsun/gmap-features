@@ -40,13 +40,13 @@ var gmap = gmap || {};
 
         
         if (params.unselected_opts) {
-	    gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
+            gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
         }
         if (params.highlighted_opts) {
-	    gmap._.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
+            gmap._.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
         }
         if (params.selected_opts) {
-	    gmap._.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+            gmap._.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
         }
 
         var geom, opts;
@@ -56,34 +56,34 @@ var gmap = gmap || {};
                 geom = gmap.geom.ParseKMLMultiPolygon(data[i].geometry);
             } else {
                 // data is a geom object
-	        if (data[i].geometry.type == "Polygon") {
+                if (data[i].geometry.type == "Polygon") {
                     geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geometry.coordinates) ];
                 } else {
                     geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geometry.coordinates);
                 }
             }
 
-	    opts = {
-	        "id": data[i].id,
-	        "multipolygon": geom,
-	        "fields": data[i].properties,
-	        "controller": controller,
-	        "map": params.map
-	    };
+            opts = {
+                "id": data[i].id,
+                "multipolygon": geom,
+                "fields": data[i].properties,
+                "controller": controller,
+                "map": params.map
+            };
             if (params.getColor) {
                 opts.color = params.getColor(data[i].properties);
             }
 
-		// Responsive polygon options
-        opts.responsive_unselected_opts = params.responsive_unselected_opts;
-        opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
-        opts.responsive_selected_opts = params.responsive_selected_opts;
+            // Responsive polygon options
+            opts.responsive_unselected_opts = params.responsive_unselected_opts;
+            opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
+            opts.responsive_selected_opts = params.responsive_selected_opts;
 
-		// Callbacks
-        opts.highlightCallback = params.highlightCallback;
-        opts.selectCallback = params.selectCallback;
+            // Callbacks
+            opts.highlightCallback = params.highlightCallback;
+            opts.selectCallback = params.selectCallback;
 
-	    self[data[i].id] = new gmap.Feature(opts);
+            self[data[i].id] = new gmap.Feature(opts);
         }
 
         return self;

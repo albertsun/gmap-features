@@ -6,9 +6,9 @@
 /*global jQuery: false, $: false, log: false, window: false, WSJNG: false, _: false, google: false, localStorage: false */
 
 // Necessary functions
-    if (!window.typeOf) {
-        window.typeOf = function(b){var a=typeof b;if(a==="object")if(b){if(b instanceof Array)a="array"}else a="null";return a};
-    }
+if (!window.typeOf) {
+    window.typeOf = function(b){var a=typeof b;if(a==="object")if(b){if(b instanceof Array)a="array"}else a="null";return a};
+}
 
 // ***************************************
 // Just in case there's a console.log hanging around....
@@ -35,29 +35,29 @@ var gmap = gmap || {};
         // Delegates to **ECMAScript 5**'s native `forEach` if available.
 
         var each = _.each = _.forEach = function(obj, iterator, context) {
-	    if (obj == null) return;
-	    if (nativeForEach && obj.forEach === nativeForEach) {
-	        obj.forEach(iterator, context);
-	    } else if (obj.length === +obj.length) {
-	        for (var i = 0, l = obj.length; i < l; i++) {
-		    if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
-	        }
-	    } else {
-	        for (var key in obj) {
-		    if (hasOwnProperty.call(obj, key)) {
-		        if (iterator.call(context, obj[key], key, obj) === breaker) return;
-		    }
-	        }
-	    }
+            if (obj == null) return;
+            if (nativeForEach && obj.forEach === nativeForEach) {
+                obj.forEach(iterator, context);
+            } else if (obj.length === +obj.length) {
+                for (var i = 0, l = obj.length; i < l; i++) {
+                    if (i in obj && iterator.call(context, obj[i], i, obj) === breaker) return;
+                }
+            } else {
+                for (var key in obj) {
+                    if (hasOwnProperty.call(obj, key)) {
+                        if (iterator.call(context, obj[key], key, obj) === breaker) return;
+                    }
+                }
+            }
         };
         // Extend a given object with all the properties in passed-in object(s).
         _.extend = function(obj) {
-	    each(slice.call(arguments, 1), function(source) {
-	        for (var prop in source) {
-		    if (source[prop] !== void 0) obj[prop] = source[prop];
-	        }
-	    });
-	    return obj;
+            each(slice.call(arguments, 1), function(source) {
+                for (var prop in source) {
+                    if (source[prop] !== void 0) obj[prop] = source[prop];
+                }
+            });
+            return obj;
         };
         return _;
     }());
@@ -104,14 +104,14 @@ var gmap = gmap || {};
         this._selected = false;
         this._highlighted = false;
 
-	    this.highlightCallback = params.highlightCallback;
-	    this.selectCallback = params.selectCallback;
+        this.highlightCallback = params.highlightCallback;
+        this.selectCallback = params.selectCallback;
 
-		var empty_function = function() { return { }; }
+        var empty_function = function() { return { }; }
 
-    	this._responsive_unselected_poly_options = params.responsive_unselected_opts == null ? empty_function : params.responsive_unselected_opts;
-    	this._responsive_highlighted_poly_options = params.responsive_highlighted_opts == null ? empty_function : params.responsive_highlighted_opts;
-    	this._responsive_selected_poly_options = params.responsive_selected_opts == null ? empty_function : params.responsive_selected_opts;
+        this._responsive_unselected_poly_options = params.responsive_unselected_opts == null ? empty_function : params.responsive_unselected_opts;
+        this._responsive_highlighted_poly_options = params.responsive_highlighted_opts == null ? empty_function : params.responsive_highlighted_opts;
+        this._responsive_selected_poly_options = params.responsive_selected_opts == null ? empty_function : params.responsive_selected_opts;
 
 
         if (params.color) {
@@ -127,11 +127,11 @@ var gmap = gmap || {};
             self.setHighlighted(false);
         }
         function clickHandler(e) {
-	    if (self.getSelected()) {
-	        self.setSelected(false);
-	    } else {
-	        self.setSelected(true);
-	    }
+            if (self.getSelected()) {
+                self.setSelected(false);
+            } else {
+                self.setSelected(true);
+            }
         }
         for (var i=0,len=params.multipolygon.length; i<len; i++) {
             this.polygons.push( new google.maps.Polygon(gmap._.extend({}, this.unselected_poly_options, this._responsive_unselected_poly_options(), {
@@ -153,7 +153,7 @@ var gmap = gmap || {};
         },
         _selected_poly_options: {
             strokeOpacity: 1.0,
-	    strokeWeight: 1.0,
+            strokeWeight: 1.0,
             strokeColor: "#0000FF"
         },
         _highlighted_poly_options: {
@@ -178,43 +178,43 @@ var gmap = gmap || {};
             return multipoly;
         },
 
-		// Redraw the polygons associated with the feature
-		// Highlighted and selected states inherit from unselected state
-		// NOTE: Remember to set your z-index for your highlights/selects above
-		//  	your unselected polygons! 
-		redraw: function() {
-			var opts = gmap._.extend({}, this.unselected_poly_options, this._responsive_unselected_poly_options());
+        // Redraw the polygons associated with the feature
+        // Highlighted and selected states inherit from unselected state
+        // NOTE: Remember to set your z-index for your highlights/selects above
+        //      your unselected polygons! 
+        redraw: function() {
+            var opts = gmap._.extend({}, this.unselected_poly_options, this._responsive_unselected_poly_options());
 
-			if(this._highlighted) {
-				opts = gmap._.extend(opts, this._highlighted_poly_options, this._responsive_highlighted_poly_options());
-			}
+            if(this._highlighted) {
+                opts = gmap._.extend(opts, this._highlighted_poly_options, this._responsive_highlighted_poly_options());
+            }
 
-			if(this._selected) {
-				opts = gmap._.extend(opts, this._selected_poly_options, this._responsive_selected_poly_options());
-			}
+            if(this._selected) {
+                opts = gmap._.extend(opts, this._selected_poly_options, this._responsive_selected_poly_options());
+            }
 
             for (i=0,len=this.polygons.length; i<len; i++) {
                 this.polygons[i].setOptions(opts);
             }
-		},
+        },
         getSelected: function() {
             return this._selected;
         },
         setSelected: function(value) {
             var i, len;
             if (value === true) {
-	        	if (this.controller.selected !== null) { 
-					this.controller.selected.setSelected(false); 
-				}
+                if (this.controller.selected !== null) { 
+                    this.controller.selected.setSelected(false); 
+                }
                 this._selected = true;
-		        this.controller.selected = this;
-				this.redraw();
-		        if (this.selectCallback) { 
-					this.selectCallback(); 
-				}
+                this.controller.selected = this;
+                this.redraw();
+                if (this.selectCallback) { 
+                    this.selectCallback(); 
+                }
             } else if (value === false) {
                 this._selected = false;
-				this.redraw();
+                this.redraw();
             }
         },
         getHighlighted: function() {
@@ -225,12 +225,12 @@ var gmap = gmap || {};
             if ((value === true) && (this._highlighted === false)) {
                 this._highlighted = true;
                 this.redraw();
-	        	if (this.highlightCallback) { 
-					this.highlightCallback(); 
-				}
+                if (this.highlightCallback) { 
+                    this.highlightCallback(); 
+                }
             } else if ((value === false) && (this._highlighted === true)) {
                 this._highlighted = false;
-				this.redraw();
+                this.redraw();
             }
         }
     };
@@ -349,13 +349,13 @@ var gmap = gmap || {};
 
         
         if (params.unselected_opts) {
-	    gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
+            gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
         }
         if (params.highlighted_opts) {
-	    gmap._.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
+            gmap._.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
         }
         if (params.selected_opts) {
-	    gmap._.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+            gmap._.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
         }
 
         var geom, opts;
@@ -365,34 +365,34 @@ var gmap = gmap || {};
                 geom = gmap.geom.ParseKMLMultiPolygon(data[i].geometry);
             } else {
                 // data is a geom object
-	        if (data[i].geometry.type == "Polygon") {
+                if (data[i].geometry.type == "Polygon") {
                     geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geometry.coordinates) ];
                 } else {
                     geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geometry.coordinates);
                 }
             }
 
-	    opts = {
-	        "id": data[i].id,
-	        "multipolygon": geom,
-	        "fields": data[i].properties,
-	        "controller": controller,
-	        "map": params.map
-	    };
+            opts = {
+                "id": data[i].id,
+                "multipolygon": geom,
+                "fields": data[i].properties,
+                "controller": controller,
+                "map": params.map
+            };
             if (params.getColor) {
                 opts.color = params.getColor(data[i].properties);
             }
 
-		// Responsive polygon options
-        opts.responsive_unselected_opts = params.responsive_unselected_opts;
-        opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
-        opts.responsive_selected_opts = params.responsive_selected_opts;
+            // Responsive polygon options
+            opts.responsive_unselected_opts = params.responsive_unselected_opts;
+            opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
+            opts.responsive_selected_opts = params.responsive_selected_opts;
 
-		// Callbacks
-        opts.highlightCallback = params.highlightCallback;
-        opts.selectCallback = params.selectCallback;
+            // Callbacks
+            opts.highlightCallback = params.highlightCallback;
+            opts.selectCallback = params.selectCallback;
 
-	    self[data[i].id] = new gmap.Feature(opts);
+            self[data[i].id] = new gmap.Feature(opts);
         }
 
         return self;

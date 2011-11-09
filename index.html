@@ -3,7 +3,7 @@
 <head>
   <title>Sample gmap-features code</title>
   <style type="text/css">
-    html, body, #map1, #map2 {
+    html, body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -195,11 +195,11 @@ function map4() {
     var map, features;
 
     map = new google.maps.Map(document.getElementById("map4"), {
-	center: new google.maps.LatLng(40.731368,-73.975071),
-	zoom: 15,
-	mapTypeId: google.maps.MapTypeId.ROADMAP,
-	mapTypeControl: false,
-	streetViewControl: false
+        center: new google.maps.LatLng(40.731368,-73.975071),
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        streetViewControl: false
     });
 
 
@@ -208,51 +208,51 @@ function map4() {
         /*
          * invoke load_polygons
          */
-	features = gmap.load_polygons({
-	    map: map,
-	    data: data, //required. all other params are optional
-      data_type: "json", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
-	    unselected_opts: {
+        features = gmap.load_polygons({
+            map: map,
+            data: data, //required. all other params are optional
+            data_type: "json", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
+            unselected_opts: {
                 "fillOpacity": .75
             },
-	    highlighted_opts: {
+            highlighted_opts: {
                 strokeWeight: 2.0,
                 strokeColor: "#000000"
             },
-	    selected_opts: {
+            selected_opts: {
                 strokeWeight: 2.0,
                 strokeColor: "#000000"
             },
-	    responsive_unselected_opts: function() {
-      		if(this.fields.totpop_wnh > 100) {
-                return { fillColor: "#8DEEEE" };
-      		} else {
-                return { fillColor: "#EE1289" };
-      		}
-        },
-	    responsive_highlighted_opts: function() {
-	        if(this.fields.totpop_wnh > 100) {
-                return { fillColor: "#8DEE00" };
-		    } else {
-                return { fillColor: "#EE1200" };
-		    }
-		},
-	    responsive_selected_opts: function() {
-		    if(this.fields.totpop_wnh > 100) {
-                return { strokeWeight: 5, strokeColor: "#00EE00" };
-		    } else {
-		        // You can also just let it inherit the default
-                return { };
-		    }
-        },
-      
-	    highlightCallback: function(e) {
-		console.log("highlighted "+this.id);
-	    },
-	    selectCallback: function(e) {
-		console.log(this.fields);
-	    }
-	});
+            responsive_unselected_opts: function() {
+                if(this.fields.totpop_wnh > 100) {
+                    return { fillColor: "#8DEEEE" };
+                } else {
+                    return { fillColor: "#EE1289" };
+                }
+            },
+            responsive_highlighted_opts: function() {
+                if(this.fields.totpop_wnh > 100) {
+                    return { fillColor: "#8DEE00" };
+                } else {
+                    return { fillColor: "#EE1200" };
+                }
+            },
+            responsive_selected_opts: function() {
+                if(this.fields.totpop_wnh > 100) {
+                    return { strokeWeight: 5, strokeColor: "#00EE00" };
+                } else {
+                    // You can also just let it inherit the default
+                    return { };
+                }
+            },
+            
+            highlightCallback: function(e) {
+                console.log("highlighted "+this.id);
+            },
+            selectCallback: function(e) {
+                console.log(this.fields);
+            }
+        });
     });
 }
 
