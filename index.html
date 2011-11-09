@@ -8,14 +8,11 @@
     padding: 0;
     height: 100%;
     }
-    #map1, #map2 {
-
-    }
 </style>
 </head>
 <body>
 <h1>Demo of gmap-features</h1>
-<ul>
+<ul class="maps">
   <li>
     <p>Parsing JSON data file</p>
     <div id="map1" style="width:500px;height:300px;"></div>
@@ -27,6 +24,10 @@
   <li>
     <p>Supports features with holes and multiple parts</p>
     <div id="map3" style="width:500px;height:300px;"></div>
+  </li>
+  <li>
+    <p>Highlighting/selecting/unselecting colors are based on feature data, via responsive_*_opts callbacks</p>
+    <div id="map4" style="width:500px;height:300px;"></div>
   </li>
 </ul>
 
@@ -189,10 +190,78 @@ function map3() {
     });
 }
 
+// example using json data and responsive callbacks for highlighted/selected/unselected states
+function map4() {
+    var map, features;
+
+    map = new google.maps.Map(document.getElementById("map4"), {
+	center: new google.maps.LatLng(40.731368,-73.975071),
+	zoom: 15,
+	mapTypeId: google.maps.MapTypeId.ROADMAP,
+	mapTypeControl: false,
+	streetViewControl: false
+    });
+
+
+    $.getJSON("sampledata/data.json", function(data) {
+        var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
+        /*
+         * invoke load_polygons
+         */
+	features = gmap.load_polygons({
+	    map: map,
+	    data: data, //required. all other params are optional
+      data_type: "json", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
+	    unselected_opts: {
+                "fillOpacity": .75
+            },
+	    highlighted_opts: {
+                strokeWeight: 2.0,
+                strokeColor: "#000000"
+            },
+	    selected_opts: {
+                strokeWeight: 2.0,
+                strokeColor: "#000000"
+            },
+	    responsive_unselected_opts: function() {
+      		if(this.fields.totpop_wnh > 100) {
+                return { fillColor: "#8DEEEE" };
+      		} else {
+                return { fillColor: "#EE1289" };
+      		}
+        },
+	    responsive_highlighted_opts: function() {
+	        if(this.fields.totpop_wnh > 100) {
+                return { fillColor: "#8DEE00" };
+		    } else {
+                return { fillColor: "#EE1200" };
+		    }
+		},
+	    responsive_selected_opts: function() {
+		    if(this.fields.totpop_wnh > 100) {
+                return { strokeWeight: 5, strokeColor: "#00EE00" };
+		    } else {
+		        // You can also just let it inherit the default
+                return { };
+		    }
+        },
+      
+	    highlightCallback: function(e) {
+		console.log("highlighted "+this.id);
+	    },
+	    selectCallback: function(e) {
+		console.log(this.fields);
+	    }
+	});
+    });
+}
+
+
 function initialize() {
     map1();
     map2();
     map3();
+    map4();
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

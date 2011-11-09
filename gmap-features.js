@@ -99,15 +99,21 @@ var gmap = gmap || {};
             //     }
             // }
         }
+
         this.controller = params.controller;
         this._selected = false;
         this._highlighted = false;
-        if (params.highlightCallback) {
+
 	    this.highlightCallback = params.highlightCallback;
-        }
-        if (params.selectCallback) {
 	    this.selectCallback = params.selectCallback;
-        }
+
+		var empty_function = function() { return { }; }
+
+    	this._responsive_unselected_poly_options = params.responsive_unselected_opts == null ? empty_function : params.responsive_unselected_opts;
+    	this._responsive_highlighted_poly_options = params.responsive_highlighted_opts == null ? empty_function : params.responsive_highlighted_opts;
+    	this._responsive_selected_poly_options = params.responsive_selected_opts == null ? empty_function : params.responsive_selected_opts;
+
+
         if (params.color) {
             this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options, {"fillColor": params.color});
         } else {
@@ -128,7 +134,7 @@ var gmap = gmap || {};
 	    }
         }
         for (var i=0,len=params.multipolygon.length; i<len; i++) {
-            this.polygons.push( new google.maps.Polygon(gmap._.extend({}, this.unselected_poly_options, {
+            this.polygons.push( new google.maps.Polygon(gmap._.extend({}, this.unselected_poly_options, this._responsive_unselected_poly_options(), {
                 paths: params.multipolygon[i],
                 map: params.map
             } )) );
@@ -171,14 +177,20 @@ var gmap = gmap || {};
             }
             return multipoly;
         },
+
 		// Redraw the polygons associated with the feature
+		// Highlighted and selected states inherit from unselected state
+		// NOTE: Remember to set your z-index for your highlights/selects above
+		//  	your unselected polygons! 
 		redraw: function() {
-			var opts = gmap._.extend({}, this.unselected_poly_options);
+			var opts = gmap._.extend({}, this.unselected_poly_options, this._responsive_unselected_poly_options());
 
 			if(this._highlighted) {
-				opts = gmap._.extend(opts, this._highlighted_poly_options);
-			} else if(this._selected) {
-				opts = gmap._.extend(opts, this._selected_poly_options);
+				opts = gmap._.extend(opts, this._highlighted_poly_options, this._responsive_highlighted_poly_options());
+			}
+
+			if(this._selected) {
+				opts = gmap._.extend(opts, this._selected_poly_options, this._responsive_selected_poly_options());
 			}
 
             for (i=0,len=this.polygons.length; i<len; i++) {
@@ -195,8 +207,8 @@ var gmap = gmap || {};
 					this.controller.selected.setSelected(false); 
 				}
                 this._selected = true;
-				this.redraw();
 		        this.controller.selected = this;
+				this.redraw();
 		        if (this.selectCallback) { 
 					this.selectCallback(); 
 				}
@@ -370,12 +382,16 @@ var gmap = gmap || {};
             if (params.getColor) {
                 opts.color = params.getColor(data[i].properties);
             }
-	    if (params.highlightCallback) {
-	        opts.highlightCallback = params.highlightCallback;
-	    }
-	    if (params.selectCallback) {
-	        opts.selectCallback = params.selectCallback;
-	    }
+
+		// Responsive polygon options
+        opts.responsive_unselected_opts = params.responsive_unselected_opts;
+        opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
+        opts.responsive_selected_opts = params.responsive_selected_opts;
+
+		// Callbacks
+        opts.highlightCallback = params.highlightCallback;
+        opts.selectCallback = params.selectCallback;
+
 	    self[data[i].id] = new gmap.Feature(opts);
         }
 

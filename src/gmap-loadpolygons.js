@@ -73,12 +73,16 @@ var gmap = gmap || {};
             if (params.getColor) {
                 opts.color = params.getColor(data[i].properties);
             }
-	    if (params.highlightCallback) {
-	        opts.highlightCallback = params.highlightCallback;
-	    }
-	    if (params.selectCallback) {
-	        opts.selectCallback = params.selectCallback;
-	    }
+
+		// Responsive polygon options
+        opts.responsive_unselected_opts = params.responsive_unselected_opts;
+        opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
+        opts.responsive_selected_opts = params.responsive_selected_opts;
+
+		// Callbacks
+        opts.highlightCallback = params.highlightCallback;
+        opts.selectCallback = params.selectCallback;
+
 	    self[data[i].id] = new gmap.Feature(opts);
         }
 
