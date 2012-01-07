@@ -37,8 +37,6 @@ var gmap = gmap || {};
         } else {
             data = data.features;
         }
-
-        
         if (params.unselected_opts) {
             gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
         }
@@ -73,12 +71,10 @@ var gmap = gmap || {};
             if (params.getColor) {
                 opts.color = params.getColor(data[i].properties);
             }
-
             // Responsive polygon options
             opts.responsive_unselected_opts = params.responsive_unselected_opts;
             opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
             opts.responsive_selected_opts = params.responsive_selected_opts;
-
             // Callbacks
             opts.highlightCallback = params.highlightCallback;
             opts.selectCallback = params.selectCallback;
@@ -87,5 +83,18 @@ var gmap = gmap || {};
         }
 
         return self;
+    };
+
+    /**
+     * Pass this the a dictionary as returned by load_polygons and it'll remove them from the map.
+     */
+    gmap.remove_polygons = function(features) {
+	for (var prop in features) {
+	    if (features.hasOwnProperty(prop)) {
+		features[prop].remove();
+		delete features[prop];
+	    }
+	}
+	return features;
     };
 }());
