@@ -41,10 +41,10 @@
 
 
 <script type="text/javascript">
+var map,features,map2,features2,map3,features3,map4,features4;
+
 // example using json data
 function map1() {
-    var map, features;
-
     map = new google.maps.Map(document.getElementById("map1"), {
 	center: new google.maps.LatLng(40.731368,-73.975071),
 	zoom: 15,
@@ -52,8 +52,6 @@ function map1() {
 	mapTypeControl: false,
 	streetViewControl: false
     });
-
-
     $.getJSON("../sampledata/data.json", function(data) {
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
         /*
@@ -95,9 +93,7 @@ function map1() {
 
 // example using KML data
 function map2() {
-    var map, features;
-
-    map = new google.maps.Map(document.getElementById("map2"), {
+    map2 = new google.maps.Map(document.getElementById("map2"), {
         center: new google.maps.LatLng(40.8765,-73.9095),
 	zoom: 15,
 	mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -108,8 +104,8 @@ function map2() {
 
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
 
-	features = gmap.load_polygons({
-	    map: map,
+	features2 = gmap.load_polygons({
+	    map: map2,
 	    data: data, //required. all other params are optional
             data_type: "kml", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
             getColor: function(data) {
@@ -139,15 +135,12 @@ function map2() {
 		console.log(this.fields);
 	    }
 	});
-
     });
 }
 
 // example using KML data
 function map3() {
-    var map, features;
-
-    map = new google.maps.Map(document.getElementById("map3"), {
+    map3 = new google.maps.Map(document.getElementById("map3"), {
         center: new google.maps.LatLng(40.8765,-73.9095),
 	zoom: 15,
 	mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -158,8 +151,8 @@ function map3() {
 
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
 
-	features = gmap.load_polygons({
-	    map: map,
+	features3 = gmap.load_polygons({
+	    map: map3,
 	    data: data, //required. all other params are optional
             data_type: "kml", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
             getColor: function(data) {
@@ -194,9 +187,7 @@ function map3() {
 }
 // example using json data and responsive callbacks for highlighted/selected/unselected states
 function map4() {
-    var map, features;
-
-    map = new google.maps.Map(document.getElementById("map4"), {
+    map4 = new google.maps.Map(document.getElementById("map4"), {
         center: new google.maps.LatLng(40.731368,-73.975071),
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -204,14 +195,13 @@ function map4() {
         streetViewControl: false
     });
 
-
     $.getJSON("../sampledata/data.json", function(data) {
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
         /*
          * invoke load_polygons
          */
-        features = gmap.load_polygons({
-            map: map,
+        features4 = gmap.load_polygons({
+            map: map4,
             data: data, //required. all other params are optional
             data_type: "json", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
             unselected_opts: {
