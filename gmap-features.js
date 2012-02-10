@@ -92,33 +92,13 @@ var gmap = gmap || {};
         this.polygons = [];
         if (params.fields) {
             this.fields = params.fields;
-            // this.humanized_fields = {};
-            // for (var prop in params.fields) {
-            //     if (params.fields.hasOwnProperty(prop)) {
-            //         this.humanized_fields[prop] = gmap.util.humanize.addCommas(params.fields[prop]);
-            //     }
-            // }
         }
 
         this.controller = params.controller;
         this._selected = false;
         this._highlighted = false;
 
-        this.highlightCallback = params.highlightCallback;
-        this.selectCallback = params.selectCallback;
-
-        var empty_function = function() { return { }; }
-
-        this._responsive_unselected_poly_options = params.responsive_unselected_opts == null ? empty_function : params.responsive_unselected_opts;
-        this._responsive_highlighted_poly_options = params.responsive_highlighted_opts == null ? empty_function : params.responsive_highlighted_opts;
-        this._responsive_selected_poly_options = params.responsive_selected_opts == null ? empty_function : params.responsive_selected_opts;
-
-
-        if (params.color) {
-            this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options, {"fillColor": params.color});
-        } else {
-            this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options);
-        }
+        this.updateOptions(params);
 
         function mouseoverHandler(e) {
             self.setHighlighted(true);
@@ -134,7 +114,7 @@ var gmap = gmap || {};
             }
         }
         for (var i=0,len=params.multipolygon.length; i<len; i++) {
-            this.polygons.push( new google.maps.Polygon(gmap._.extend({}, this.unselected_poly_options, this._responsive_unselected_poly_options(), {
+            this.polygons.push( new google.maps.Polygon(gmap._.extend({}, {
                 paths: params.multipolygon[i],
                 map: params.map
             } )) );
@@ -142,6 +122,7 @@ var gmap = gmap || {};
             google.maps.event.addListener(this.polygons[i], "mouseout", mouseoutHandler);
             google.maps.event.addListener(this.polygons[i], "click", clickHandler);
         }
+        this.redraw();
     };
     gmap.Feature.prototype = {
         _unselected_poly_options: {
@@ -160,6 +141,32 @@ var gmap = gmap || {};
             strokeOpacity: 1.0,
             strokeWeight: 1.0,
             strokeColor: "#00FF00"
+        },
+        updateOptions: function(params) {
+            this.highlightCallback = params.highlightCallback;
+            this.selectCallback = params.selectCallback;
+
+            var empty_function = function() { return { }; }
+
+            this._responsive_unselected_poly_options = params.responsive_unselected_opts == null ? empty_function : params.responsive_unselected_opts;
+            this._responsive_highlighted_poly_options = params.responsive_highlighted_opts == null ? empty_function : params.responsive_highlighted_opts;
+            this._responsive_selected_poly_options = params.responsive_selected_opts == null ? empty_function : params.responsive_selected_opts;
+
+            if (params.unselected_opts) {
+                this._unselected_poly_options = gmap._.extend({},gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
+            }
+            if (params.highlighted_opts) {
+                this._highlighted_poly_options = gmap._.extend({},gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
+            }
+            if (params.selected_opts) {
+                this._selected_poly_options = gmap._.extend({},gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+            }
+
+            if (params.color) {
+                this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options, {"fillColor": params.color});
+            } else {
+                this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options);
+            }
         },
         remove: function(e) {
             for (var i=0,len=this.polygons.length; i<len; i++) {
@@ -235,7 +242,8 @@ var gmap = gmap || {};
         }
     };
 
-}());/* Author: Albert Sun
+}());
+/* Author: Albert Sun
    WSJ.com News Graphics
 */
 
@@ -335,60 +343,68 @@ var gmap = gmap || {};
         return features;
     }
 
-    gmap.load_polygons = function(params) {
+    /*
+     * Takes some params and builds a whole bunch of polygons.
+     * OR, if passed an optional second argument, a dictionary of features, update those features with new options. 
+     */
+    gmap.load_polygons = function(params, features) {
         var self = {},
         data = params.data,
         controller = {"selected": null};
 
-        if (params.data_type == "kml") {
-            data = parseKML(data);
-            //console.log(data);
-        } else {
-            data = data.features;
-        }
-        if (params.unselected_opts) {
-            gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
-        }
-        if (params.highlighted_opts) {
-            gmap._.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
-        }
-        if (params.selected_opts) {
-            gmap._.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
-        }
-
-        var geom, opts;
-        for (var i=0,len=data.length; i<len; i++) {
-            if (typeOf(data[i].geometry.coordinates) !== "array") {
-                // data is a KML node
-                geom = gmap.geom.ParseKMLMultiPolygon(data[i].geometry);
-            } else {
-                // data is a geom object
-                if (data[i].geometry.type == "Polygon") {
-                    geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geometry.coordinates) ];
-                } else {
-                    geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geometry.coordinates);
-                }
-            }
-
-            opts = {
-                "id": data[i].id,
-                "multipolygon": geom,
-                "fields": data[i].properties,
-                "controller": controller,
+        var buildOpts = function(params) {
+            var opts = {
                 "map": params.map
             };
-            if (params.getColor) {
-                opts.color = params.getColor(data[i].properties);
-            }
-            // Responsive polygon options
-            opts.responsive_unselected_opts = params.responsive_unselected_opts;
-            opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
-            opts.responsive_selected_opts = params.responsive_selected_opts;
-            // Callbacks
-            opts.highlightCallback = params.highlightCallback;
-            opts.selectCallback = params.selectCallback;
+            gmap._.extend(opts, params);
+            return opts;
+        };
 
-            self[data[i].id] = new gmap.Feature(opts);
+
+        if (typeOf(features) === "object") {
+          self = features;
+          for (var prop in features) {
+            if (features.hasOwnProperty(prop)) {
+              var opts = buildOpts(params);
+              if (params.getColor) {
+                  opts.color = params.getColor(features[prop].fields);
+              }
+              features[prop].updateOptions(opts); 
+              features[prop].redraw();
+            }
+          }
+        } else {
+          if (params.data_type == "kml") {
+              data = parseKML(data);
+              //console.log(data);
+          } else {
+              data = data.features;
+          }
+          var geom, opts;
+          for (var i=0,len=data.length; i<len; i++) {
+              if (typeOf(data[i].geometry.coordinates) !== "array") {
+                  // data is a KML node
+                  geom = gmap.geom.ParseKMLMultiPolygon(data[i].geometry);
+              } else {
+                  // data is a geom object
+                  if (data[i].geometry.type == "Polygon") {
+                      geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geometry.coordinates) ];
+                  } else {
+                      geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geometry.coordinates);
+                  }
+              }
+
+              opts = buildOpts(params);
+              opts.multipolygon = geom;
+              opts.controller = controller;
+              if (params.getColor) {
+                  opts.color = params.getColor(data[i].properties);
+              }
+              opts.id = data[i].id;
+              opts.fields = data[i].properties;
+
+              self[data[i].id] = new gmap.Feature(opts);
+          }
         }
 
         return self;
@@ -398,12 +414,13 @@ var gmap = gmap || {};
      * Pass this the a dictionary as returned by load_polygons and it'll remove them from the map.
      */
     gmap.remove_polygons = function(features) {
-	for (var prop in features) {
-	    if (features.hasOwnProperty(prop)) {
-		features[prop].remove();
-		delete features[prop];
-	    }
-	}
-	return features;
+        for (var prop in features) {
+            if (features.hasOwnProperty(prop)) {
+                features[prop].remove();
+                delete features[prop];
+            }
+        }
+        return features;
     };
+
 }());

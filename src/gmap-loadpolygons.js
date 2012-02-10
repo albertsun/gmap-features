@@ -26,60 +26,68 @@ var gmap = gmap || {};
         return features;
     }
 
-    gmap.load_polygons = function(params) {
+    /*
+     * Takes some params and builds a whole bunch of polygons.
+     * OR, if passed an optional second argument, a dictionary of features, update those features with new options. 
+     */
+    gmap.load_polygons = function(params, features) {
         var self = {},
         data = params.data,
         controller = {"selected": null};
 
-        if (params.data_type == "kml") {
-            data = parseKML(data);
-            //console.log(data);
-        } else {
-            data = data.features;
-        }
-        if (params.unselected_opts) {
-            gmap._.extend(gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
-        }
-        if (params.highlighted_opts) {
-            gmap._.extend(gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
-        }
-        if (params.selected_opts) {
-            gmap._.extend(gmap.Feature.prototype._selected_poly_options, params.selected_opts);
-        }
-
-        var geom, opts;
-        for (var i=0,len=data.length; i<len; i++) {
-            if (typeOf(data[i].geometry.coordinates) !== "array") {
-                // data is a KML node
-                geom = gmap.geom.ParseKMLMultiPolygon(data[i].geometry);
-            } else {
-                // data is a geom object
-                if (data[i].geometry.type == "Polygon") {
-                    geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geometry.coordinates) ];
-                } else {
-                    geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geometry.coordinates);
-                }
-            }
-
-            opts = {
-                "id": data[i].id,
-                "multipolygon": geom,
-                "fields": data[i].properties,
-                "controller": controller,
+        var buildOpts = function(params) {
+            var opts = {
                 "map": params.map
             };
-            if (params.getColor) {
-                opts.color = params.getColor(data[i].properties);
-            }
-            // Responsive polygon options
-            opts.responsive_unselected_opts = params.responsive_unselected_opts;
-            opts.responsive_highlighted_opts = params.responsive_highlighted_opts;
-            opts.responsive_selected_opts = params.responsive_selected_opts;
-            // Callbacks
-            opts.highlightCallback = params.highlightCallback;
-            opts.selectCallback = params.selectCallback;
+            gmap._.extend(opts, params);
+            return opts;
+        };
 
-            self[data[i].id] = new gmap.Feature(opts);
+
+        if (typeOf(features) === "object") {
+          self = features;
+          for (var prop in features) {
+            if (features.hasOwnProperty(prop)) {
+              var opts = buildOpts(params);
+              if (params.getColor) {
+                  opts.color = params.getColor(features[prop].fields);
+              }
+              features[prop].updateOptions(opts); 
+              features[prop].redraw();
+            }
+          }
+        } else {
+          if (params.data_type == "kml") {
+              data = parseKML(data);
+              //console.log(data);
+          } else {
+              data = data.features;
+          }
+          var geom, opts;
+          for (var i=0,len=data.length; i<len; i++) {
+              if (typeOf(data[i].geometry.coordinates) !== "array") {
+                  // data is a KML node
+                  geom = gmap.geom.ParseKMLMultiPolygon(data[i].geometry);
+              } else {
+                  // data is a geom object
+                  if (data[i].geometry.type == "Polygon") {
+                      geom = [ gmap.geom.ParseGeoJSONPolygon(data[i].geometry.coordinates) ];
+                  } else {
+                      geom = gmap.geom.ParseGeoJSONMultiPolygon(data[i].geometry.coordinates);
+                  }
+              }
+
+              opts = buildOpts(params);
+              opts.multipolygon = geom;
+              opts.controller = controller;
+              if (params.getColor) {
+                  opts.color = params.getColor(data[i].properties);
+              }
+              opts.id = data[i].id;
+              opts.fields = data[i].properties;
+
+              self[data[i].id] = new gmap.Feature(opts);
+          }
         }
 
         return self;

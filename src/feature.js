@@ -92,33 +92,13 @@ var gmap = gmap || {};
         this.polygons = [];
         if (params.fields) {
             this.fields = params.fields;
-            // this.humanized_fields = {};
-            // for (var prop in params.fields) {
-            //     if (params.fields.hasOwnProperty(prop)) {
-            //         this.humanized_fields[prop] = gmap.util.humanize.addCommas(params.fields[prop]);
-            //     }
-            // }
         }
 
         this.controller = params.controller;
         this._selected = false;
         this._highlighted = false;
 
-        this.highlightCallback = params.highlightCallback;
-        this.selectCallback = params.selectCallback;
-
-        var empty_function = function() { return { }; }
-
-        this._responsive_unselected_poly_options = params.responsive_unselected_opts == null ? empty_function : params.responsive_unselected_opts;
-        this._responsive_highlighted_poly_options = params.responsive_highlighted_opts == null ? empty_function : params.responsive_highlighted_opts;
-        this._responsive_selected_poly_options = params.responsive_selected_opts == null ? empty_function : params.responsive_selected_opts;
-
-
-        if (params.color) {
-            this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options, {"fillColor": params.color});
-        } else {
-            this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options);
-        }
+        this.updateOptions(params);
 
         function mouseoverHandler(e) {
             self.setHighlighted(true);
@@ -134,7 +114,7 @@ var gmap = gmap || {};
             }
         }
         for (var i=0,len=params.multipolygon.length; i<len; i++) {
-            this.polygons.push( new google.maps.Polygon(gmap._.extend({}, this.unselected_poly_options, this._responsive_unselected_poly_options(), {
+            this.polygons.push( new google.maps.Polygon(gmap._.extend({}, {
                 paths: params.multipolygon[i],
                 map: params.map
             } )) );
@@ -142,6 +122,7 @@ var gmap = gmap || {};
             google.maps.event.addListener(this.polygons[i], "mouseout", mouseoutHandler);
             google.maps.event.addListener(this.polygons[i], "click", clickHandler);
         }
+        this.redraw();
     };
     gmap.Feature.prototype = {
         _unselected_poly_options: {
@@ -160,6 +141,32 @@ var gmap = gmap || {};
             strokeOpacity: 1.0,
             strokeWeight: 1.0,
             strokeColor: "#00FF00"
+        },
+        updateOptions: function(params) {
+            this.highlightCallback = params.highlightCallback;
+            this.selectCallback = params.selectCallback;
+
+            var empty_function = function() { return { }; }
+
+            this._responsive_unselected_poly_options = params.responsive_unselected_opts == null ? empty_function : params.responsive_unselected_opts;
+            this._responsive_highlighted_poly_options = params.responsive_highlighted_opts == null ? empty_function : params.responsive_highlighted_opts;
+            this._responsive_selected_poly_options = params.responsive_selected_opts == null ? empty_function : params.responsive_selected_opts;
+
+            if (params.unselected_opts) {
+                this._unselected_poly_options = gmap._.extend({},gmap.Feature.prototype._unselected_poly_options, params.unselected_opts);
+            }
+            if (params.highlighted_opts) {
+                this._highlighted_poly_options = gmap._.extend({},gmap.Feature.prototype._highlighted_poly_options, params.highlighted_opts);
+            }
+            if (params.selected_opts) {
+                this._selected_poly_options = gmap._.extend({},gmap.Feature.prototype._selected_poly_options, params.selected_opts);
+            }
+
+            if (params.color) {
+                this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options, {"fillColor": params.color});
+            } else {
+                this.unselected_poly_options = gmap._.extend({}, this._unselected_poly_options);
+            }
         },
         remove: function(e) {
             for (var i=0,len=this.polygons.length; i<len; i++) {
