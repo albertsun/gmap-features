@@ -89,12 +89,13 @@ var gmap = gmap || {};
      * Pass this the a dictionary as returned by load_polygons and it'll remove them from the map.
      */
     gmap.remove_polygons = function(features) {
-	for (var prop in features) {
-	    if (features.hasOwnProperty(prop)) {
-		features[prop].remove();
-		delete features[prop];
-	    }
-	}
-	return features;
+        for (var prop in features) {
+            if (features.hasOwnProperty(prop)) {
+                features[prop].remove();
+                delete features[prop];
+            }
+        }
+        return features;
     };
+
 }());

@@ -46,20 +46,20 @@ var map,features,map2,features2,map3,features3,map4,features4;
 // example using json data
 function map1() {
     map = new google.maps.Map(document.getElementById("map1"), {
-	center: new google.maps.LatLng(40.731368,-73.975071),
-	zoom: 15,
-	mapTypeId: google.maps.MapTypeId.ROADMAP,
-	mapTypeControl: false,
-	streetViewControl: false
+      center: new google.maps.LatLng(40.731368,-73.975071),
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeControl: false,
+      streetViewControl: false
     });
     $.getJSON("../sampledata/data.json", function(data) {
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
         /*
          * invoke load_polygons
          */
-	features = gmap.load_polygons({
-	    map: map,
-	    data: data, //required. all other params are optional
+        features = gmap.load_polygons({
+            map: map,
+            data: data, //required. all other params are optional
             data_type: "json", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
             getColor: function(data) {
                 // runs in the scope of each feature. returns the color to set it to
@@ -70,24 +70,24 @@ function map1() {
                 } else { perc = 0; }
                 return BLUES[(Math.floor(perc * 5)) % 5]; // maps [0,1) into 0 to 4. buckets of .2
             },
-	    unselected_opts: {
+            unselected_opts: {
                 "fillOpacity": .75
             },
-	    highlighted_opts: {
+            highlighted_opts: {
                 strokeWeight: 3.0,
                 strokeColor: "#FF0000"
             },
-	    selected_opts: {
+            selected_opts: {
                 strokeWeight: 2.0,
                 strokeColor: "#0000FF"
             },
-	    highlightCallback: function(e) {
-		console.log("highlighted "+this.id);
-	    },
-	    selectCallback: function(e) {
-		console.log(this.fields);
-	    }
-	});
+            highlightCallback: function(e) {
+                console.log("highlighted "+this.id);
+            },
+            selectCallback: function(e) {
+                console.log(this.fields);
+            }
+        });
     });
 }
 
@@ -95,18 +95,18 @@ function map1() {
 function map2() {
     map2 = new google.maps.Map(document.getElementById("map2"), {
         center: new google.maps.LatLng(40.8765,-73.9095),
-	zoom: 15,
-	mapTypeId: google.maps.MapTypeId.ROADMAP,
-	mapTypeControl: false,
-	streetViewControl: false
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        streetViewControl: false
     });
     $.get("../sampledata/data.kml", function(data) {
 
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
 
-	features2 = gmap.load_polygons({
-	    map: map2,
-	    data: data, //required. all other params are optional
+        features2 = gmap.load_polygons({
+            map: map2,
+            data: data, //required. all other params are optional
             data_type: "kml", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
             getColor: function(data) {
                 // runs in the scope of each feature. returns the color to set it to
@@ -117,24 +117,24 @@ function map2() {
                 } else { perc = 0; }
                 return BLUES[(Math.floor(perc * 5)) % 5]; // maps [0,1) into 0 to 4. buckets of .2
             },
-	    unselected_opts: {
+            unselected_opts: {
                 "fillOpacity": .75
             },
-	    highlighted_opts: {
+            highlighted_opts: {
                 strokeWeight: 3.0,
                 strokeColor: "#FF0000"
             },
-	    selected_opts: {
+            selected_opts: {
                 strokeWeight: 2.0,
                 strokeColor: "#0000FF"
             },
-	    highlightCallback: function(e) {
-		console.log("highlighted "+this.id);
-	    },
-	    selectCallback: function(e) {
-		console.log(this.fields);
-	    }
-	});
+            highlightCallback: function(e) {
+                console.log("highlighted "+this.id);
+            },
+            selectCallback: function(e) {
+                console.log(this.fields);
+            }
+        });
     });
 }
 
@@ -142,18 +142,18 @@ function map2() {
 function map3() {
     map3 = new google.maps.Map(document.getElementById("map3"), {
         center: new google.maps.LatLng(40.8765,-73.9095),
-	zoom: 15,
-	mapTypeId: google.maps.MapTypeId.ROADMAP,
-	mapTypeControl: false,
-	streetViewControl: false
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        streetViewControl: false
     });
     $.get("../sampledata/data2.kml", function(data) {
 
         var BLUES = ["#E9F6FF", "#B3D6FF", "#7BB1FF", "#4C89E0", "#4073BC", "#284A72"];
 
-	features3 = gmap.load_polygons({
-	    map: map3,
-	    data: data, //required. all other params are optional
+        features3 = gmap.load_polygons({
+            map: map3,
+            data: data, //required. all other params are optional
             data_type: "kml", // 'json' is default. can also use 'kml' in which case pass the kml document as data as a string 
             getColor: function(data) {
                 // runs in the scope of each feature. returns the color to set it to
@@ -164,24 +164,24 @@ function map3() {
                 } else { perc = 0; }
                 return BLUES[(Math.floor(perc * 5)) % 5]; // maps [0,1) into 0 to 4. buckets of .2
             },
-	    unselected_opts: {
+            unselected_opts: {
                 "fillOpacity": .75
             },
-	    highlighted_opts: {
+            highlighted_opts: {
                 strokeWeight: 3.0,
                 strokeColor: "#FF0000"
             },
-	    selected_opts: {
+            selected_opts: {
                 strokeWeight: 2.0,
                 strokeColor: "#0000FF"
             },
-	    highlightCallback: function(e) {
-		console.log("highlighted "+this.id);
-	    },
-	    selectCallback: function(e) {
-		console.log(this.fields);
-	    }
-	});
+            highlightCallback: function(e) {
+                console.log("highlighted "+this.id);
+            },
+            selectCallback: function(e) {
+                console.log(this.fields);
+            }
+        });
 
     });
 }
